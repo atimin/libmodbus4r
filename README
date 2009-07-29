@@ -1,0 +1,29 @@
+== About
+
+Binding use *libmodbus* (free implementation of modbus for Linux\MacOS) for Ruby.
+
+== Futures
+
+* Use C library *libmodbus*;
+* ModBus TCP master(client);
+* Support functions: 
+* * read coil status (0x01)
+* * read input status (0x02)
+* * read holding registers (0x03)
+* * read input registers (0x04)
+* * force single coil (0x05)
+* * preset single register (0x06)
+* * force multiple coils (0x0F)
+* * preset multiple registers (0x10)
+
+== Install
+
+1. Install last release ruby 1.9.1 from http://ruby-lang.org
+2. Install libmodbus-2.0.3 from https://launchpad.net/libmodbus
+3. Install libmodbus4r 
+   *$ sudo rake install*
+   or
+   *$ gem install libmodbus4r --source http://gems.github.com
+
+== AUTHORS
+Aleksey Timin <atimin@gmail.com> 

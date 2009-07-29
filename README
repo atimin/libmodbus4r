@@ -23,7 +23,7 @@ Binding use *libmodbus* (free implementation of modbus for Linux\MacOS) for Ruby
 3. Install libmodbus4r 
    *$ sudo rake install*
    or
-   *$ gem install libmodbus4r --source http://gems.github.com
+   *$ gem install flipback-libmodbus4r --source http://gems.github.com
 
 == AUTHORS
 Aleksey Timin <atimin@gmail.com> 

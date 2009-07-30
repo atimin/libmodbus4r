@@ -1,7 +1,7 @@
 require 'rubygems'
 spec = Gem::Specification.new do |s|
   s.name = "libmodbus4r"
-  s.version = "0.1.0"
+  s.version = "0.2.0"
   s.author  = 'Aleksey Timin'
   s.platform = Gem::Platform::RUBY
   s.summary = "Binding use *libmodbus* (free implementation of modbus for Linux\\MacOS) for Ruby."

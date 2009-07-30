@@ -59,4 +59,12 @@ void Init_modbus4r()
                                         eModBusError);
     eSlaveDeviceBusy = rb_define_class_under(mErrors, "SlaveDeviceBusy",
                                         eModBusError);
+    eNegativeAcknowledge = rb_define_class_under(mErrors, "NegativeAcknowledge",
+                                        eModBusError);
+    eMemoryParityError = rb_define_class_under(mErrors, "MemoryParityError",
+                                        eModBusError);
+    eGatewayProblemPath = rb_define_class_under(mErrors, "GatewayProblemPath", 
+                                        eModBusError);
+    eGatewayProblemTarget = rb_define_class_under(mErrors, "GatewayProblemTarget",
+                                        eModBusError);
 }

@@ -20,34 +20,6 @@ void mb_tcp_mstr_free(modbus_param_t *mb_param )
     free(mb_param);
 }
 
-void mb_tcp_raise_error(int exception)
-{
-    switch (exception) {
-        case ILLEGAL_FUNCTION:
-            rb_raise(eIllegalFunction, "Illegal function code (-1)");
-            break;
-        case ILLEGAL_DATA_ADDRESS:
-            rb_raise(eIllegalDataAddress, "Illegal data address (-2)");
-            break;
-        case  ILLEGAL_DATA_VALUE:
-            rb_raise(eIllegalDataValue, "Illegal data value (-3)");
-            break;
-        case SLAVE_DEVICE_FAILURE:
-            rb_raise(eSlaveDeviceFailure, "Slave device or server failure (-4)");
-            break;
-        case ACKNOWLEDGE:
-            rb_raise(eAcknowledge, "Acknowledge (-5)");
-            break;
-        case SLAVE_DEVICE_BUSY:
-            rb_raise(eSlaveDeviceBusy, "Slave device or server busy (-5)");
-            break;
-        case TOO_MANY_DATA:
-            rb_raise(eModBusError, "Too many data (-15)");
-        default:
-            rb_raise(eModBusError, "Unknow exception with code %i", exception);
-    }
-}
-
 VALUE mb_tcp_mstr_new(VALUE self, VALUE ip_address, VALUE port)
 {
     modbus_param_t *mb_param;
@@ -108,7 +80,7 @@ VALUE mb_tcp_mstr_read_coil(VALUE self, VALUE slave,
     int status = (*func)(mb_param, FIX2INT(slave), FIX2INT(start_addr), FIX2INT(nb), dest);
 
     if (status < 0) {
-        mb_tcp_raise_error(status);
+        mb_raise_error(status);
     }
 
     int i;
@@ -149,7 +121,7 @@ VALUE mb_tcp_mstr_read_registers(VALUE self, VALUE slave,
     int status = (*func)(mb_param, FIX2INT(slave), FIX2INT(start_addr), FIX2INT(nb), dest);
 
     if (status < 0) {
-        mb_tcp_raise_error(status);
+        mb_raise_error(status);
     }
 
     int i;
@@ -188,7 +160,7 @@ VALUE mb_tcp_mstr_force_single_coil(VALUE self, VALUE slave,
     int status = force_single_coil(mb_param, FIX2INT(slave), FIX2INT(coil_addr), (state == Qfalse ? 0 : 1));
 
     if (status < 0) {
-        mb_tcp_raise_error(status);
+        mb_raise_error(status);
     }
 
     return self;
@@ -208,7 +180,7 @@ VALUE mb_tcp_mstr_preset_single_register(VALUE self, VALUE slave,
     int status = preset_single_register(mb_param, FIX2INT(slave), FIX2INT(reg_addr), FIX2INT(value));
 
     if (status < 0) {
-        mb_tcp_raise_error(status);
+        mb_raise_error(status);
     }
 
     return self;
@@ -236,7 +208,7 @@ VALUE mb_tcp_mstr_force_multiple_coils(VALUE self, VALUE slave,
     int status = force_multiple_coils(mb_param, FIX2INT(slave), FIX2INT(start_addr), RARRAY_LEN(data), buf);
 
     if (status < 0) {
-        mb_tcp_raise_error(status);
+        mb_raise_error(status);
     }
 
     return self;
@@ -265,7 +237,7 @@ VALUE mb_tcp_mstr_preset_multiple_registers(VALUE self, VALUE slave,
     int status = preset_multiple_registers(mb_param, FIX2INT(slave), FIX2INT(start_addr), RARRAY_LEN(data), buf);
 
     if (status < 0) {
-        mb_tcp_raise_error(status);
+        mb_raise_error(status);
     }
 
     return self;

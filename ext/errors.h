@@ -17,6 +17,8 @@ GNU General Public License for more details. */
 extern VALUE mErrors, eModBusError, eIllegalFunction,
     eIllegalDataAddress, eIllegalDataValue,
     eSlaveDeviceFailure, eAcknowledge, 
-    eSlaveDeviceBusy; 
+    eSlaveDeviceBusy, eNegativeAcknowledge,
+    eMemoryParityError, eGatewayProblemPath, eGatewayProblemTarget; 
 
+extern void mb_raise_error(int exception);
 #endif

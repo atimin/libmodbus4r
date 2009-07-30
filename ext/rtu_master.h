@@ -11,9 +11,10 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details. */
 
-#ifndef TCP_MASTER_H
-#define TCP_MASTER_H
+#ifndef RTU_MASTER_H
+#define RTU_MASTER_H
 
-extern VALUE mb_tcp_mstr_new(VALUE self, VALUE ip_address, VALUE port);
+extern VALUE mb_rtu_mstr_new(VALUE self, VALUE device, VALUE baud, 
+                            VALUE parity, VALUE data_bit, VALUE stop_bit);
 
 #endif

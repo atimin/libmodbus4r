@@ -13,21 +13,26 @@ GNU General Public License for more details. */
 
 #include "modbus4r.h"
 
-void mb_tcp_mstr_free(modbus_param_t *mb_param )
+void mb_rtu_mstr_free(modbus_param_t *mb_param )
 {
     modbus_close(mb_param);
     free(mb_param);
 }
 
-VALUE mb_tcp_mstr_new(VALUE self, VALUE ip_address, VALUE port)
+VALUE mb_rtu_mstr_new(VALUE self, VALUE device, VALUE baud, 
+                            VALUE parity, VALUE data_bit, VALUE stop_bit)
 {
     modbus_param_t *mb_param;
 
     mb_param = malloc(sizeof(modbus_param_t));
-    ip_address = rb_funcall(ip_address, rb_intern("to_s"), 0);
-    port = rb_funcall(port, rb_intern("to_i"), 0);
+    device = rb_funcall(device, rb_intern("to_s"), 0);
+    baud = rb_funcall(baud, rb_intern("to_i"), 0);
+    parity = rb_funcall(parity, rb_intern("to_s"), 0);
+    data_bit = rb_funcall(data_bit, rb_intern("to_i"), 0);
+    stop_bit = rb_funcall(stop_bit, rb_intern("to_i"), 0);
 
-    modbus_init_tcp(mb_param, RSTRING_PTR(ip_address), FIX2INT(port));
+    modbus_init_rtu(mb_param, RSTRING_PTR(device), FIX2INT(baud),
+                    RSTRING_PTR(parity), FIX2INT(data_bit), FIX2INT(stop_bit));
 
-    return Data_Wrap_Struct(self, 0, mb_tcp_mstr_free, mb_param);
+    return Data_Wrap_Struct(self, 0, mb_rtu_mstr_free, mb_param);
 }

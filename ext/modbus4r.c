@@ -13,36 +13,45 @@ GNU General Public License for more details. */
 
 #include "modbus4r.h" 
 #include "errors.h"
+#include "master.h"
 #include "tcp_master.h"
+#include "rtu_master.h"
 
-VALUE mModBus, cTCPMaster;
+VALUE mModBus, cMaster, cTCPMaster, cRTUMaster;
 
 void Init_modbus4r()
 {
     mModBus = rb_define_module("ModBus");
+    /* Master */
+    cMaster = rb_define_class_under(mModBus, "Master", rb_cObject);
+    rb_define_method(cMaster, "closed?", mb_mstr_is_closed, 0);
+    rb_define_method(cMaster, "connect", mb_mstr_connect, 0);
+    rb_define_method(cMaster, "close", mb_mstr_close, 0);
+    rb_define_method(cMaster, "read_coil_status", 
+                    mb_mstr_read_coil_status, 3);
+    rb_define_method(cMaster, "read_input_status",
+                    mb_mstr_read_input_status, 3);
+    rb_define_method(cMaster, "read_holding_registers", 
+                    mb_mstr_read_holding_registers, 3);
+    rb_define_method(cMaster, "read_input_registers", 
+                    mb_mstr_read_holding_registers, 3);
+    rb_define_method(cMaster, "force_single_coil", 
+                    mb_mstr_force_single_coil, 3);
+    rb_define_method(cMaster, "preset_single_register", 
+                    mb_mstr_preset_single_register, 3);
+    rb_define_method(cMaster, "force_multiple_coils", 
+                    mb_mstr_force_multiple_coils, 3);
+    rb_define_method(cMaster, "preset_multiple_registers", 
+                    mb_mstr_preset_multiple_registers, 3);
 
     /* TCPMaster */
-    cTCPMaster = rb_define_class_under(mModBus, "TCPMaster", rb_cObject);
+    cTCPMaster = rb_define_class_under(mModBus, "TCPMaster", cMaster);
     rb_define_singleton_method(cTCPMaster, "new", mb_tcp_mstr_new, 2);
-    rb_define_method(cTCPMaster, "closed?", mb_tcp_mstr_is_closed, 0);
-    rb_define_method(cTCPMaster, "connect", mb_tcp_mstr_connect, 0);
-    rb_define_method(cTCPMaster, "close", mb_tcp_mstr_close, 0);
-    rb_define_method(cTCPMaster, "read_coil_status", 
-                    mb_tcp_mstr_read_coil_status, 3);
-    rb_define_method(cTCPMaster, "read_input_status",
-                    mb_tcp_mstr_read_input_status, 3);
-    rb_define_method(cTCPMaster, "read_holding_registers", 
-                    mb_tcp_mstr_read_holding_registers, 3);
-    rb_define_method(cTCPMaster, "read_input_registers", 
-                    mb_tcp_mstr_read_holding_registers, 3);
-    rb_define_method(cTCPMaster, "force_single_coil", 
-                    mb_tcp_mstr_force_single_coil, 3);
-    rb_define_method(cTCPMaster, "preset_single_register", 
-                    mb_tcp_mstr_preset_single_register, 3);
-    rb_define_method(cTCPMaster, "force_multiple_coils", 
-                    mb_tcp_mstr_force_multiple_coils, 3);
-    rb_define_method(cTCPMaster, "preset_multiple_registers", 
-                    mb_tcp_mstr_preset_multiple_registers, 3);
+
+    /* RTUMaster */
+    cRTUMaster = rb_define_class_under(mModBus, "RTUMaster", cMaster);
+    rb_define_singleton_method(cRTUMaster, "new", mb_rtu_mstr_new, 5);
+
     /* Errors */
     mErrors = rb_define_module_under(mModBus, "Errors");
     eModBusError = rb_define_class_under(mErrors, "ModBusError", 

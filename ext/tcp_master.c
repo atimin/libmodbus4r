@@ -93,8 +93,9 @@ VALUE mb_tcp_mstr_close(VALUE self)
     return self;
 }
 
-VALUE mb_tcp_mstr_read_coil_status(VALUE self, VALUE slave, 
-                                    VALUE start_addr, VALUE nb)
+VALUE mb_tcp_mstr_read_coil(VALUE self, VALUE slave, 
+                    VALUE start_addr, VALUE nb, 
+                    int (*func)(modbus_param_t*, int, int, int, uint8_t*))
 {
     modbus_param_t *mb_param;
     Data_Get_Struct(self, modbus_param_t, mb_param);
@@ -104,7 +105,7 @@ VALUE mb_tcp_mstr_read_coil_status(VALUE self, VALUE slave,
     nb = rb_funcall(nb, rb_intern("to_i"), 0);
     
     uint8_t dest[FIX2INT(nb)];
-    int status = read_coil_status(mb_param, FIX2INT(slave), FIX2INT(start_addr), FIX2INT(nb), dest);
+    int status = (*func)(mb_param, FIX2INT(slave), FIX2INT(start_addr), FIX2INT(nb), dest);
 
     if (status < 0) {
         mb_tcp_raise_error(status);
@@ -117,36 +118,25 @@ VALUE mb_tcp_mstr_read_coil_status(VALUE self, VALUE slave,
     }
 
     return ret;
+}
+
+VALUE mb_tcp_mstr_read_coil_status(VALUE self, VALUE slave, 
+                                    VALUE start_addr, VALUE nb)
+{
+    return mb_tcp_mstr_read_coil(self, slave, start_addr, nb, 
+                            read_coil_status);
 }
 
 VALUE mb_tcp_mstr_read_input_status(VALUE self, VALUE slave,
                                     VALUE start_addr, VALUE nb)
 {
-    modbus_param_t *mb_param;
-    Data_Get_Struct(self, modbus_param_t, mb_param);
-
-    slave = rb_funcall(slave, rb_intern("to_i"), 0);
-    start_addr = rb_funcall(start_addr, rb_intern("to_i"), 0);
-    nb = rb_funcall(nb, rb_intern("to_i"), 0);
-    
-    uint8_t dest[FIX2INT(nb)];
-    int status = read_input_status(mb_param, FIX2INT(slave), FIX2INT(start_addr), FIX2INT(nb), dest);
-
-    if (status < 0) {
-        mb_tcp_raise_error(status);
-    }
-
-    int i;
-    VALUE ret = rb_ary_new();
-    for (i = 0; i < FIX2INT(nb); i++) {
-        dest[i] == 1 ? rb_ary_push(ret, Qtrue) : rb_ary_push(ret, Qfalse);
-    }
-
-    return ret;
+    return mb_tcp_mstr_read_coil(self, slave, start_addr, nb, 
+                            read_coil_status);
 }
 
-VALUE mb_tcp_mstr_read_input_registers(VALUE self, VALUE slave,
-                                    VALUE start_addr, VALUE nb)
+VALUE mb_tcp_mstr_read_registers(VALUE self, VALUE slave,
+                    VALUE start_addr, VALUE nb,
+                    int (*func)(modbus_param_t*, int, int, int, uint16_t*))
 {
     modbus_param_t *mb_param;
     Data_Get_Struct(self, modbus_param_t, mb_param);
@@ -156,7 +146,7 @@ VALUE mb_tcp_mstr_read_input_registers(VALUE self, VALUE slave,
     nb = rb_funcall(nb, rb_intern("to_i"), 0);
     
     uint16_t dest[FIX2INT(nb)];
-    int status = read_input_registers(mb_param, FIX2INT(slave), FIX2INT(start_addr), FIX2INT(nb), dest);
+    int status = (*func)(mb_param, FIX2INT(slave), FIX2INT(start_addr), FIX2INT(nb), dest);
 
     if (status < 0) {
         mb_tcp_raise_error(status);
@@ -175,27 +165,15 @@ VALUE mb_tcp_mstr_read_input_registers(VALUE self, VALUE slave,
 VALUE mb_tcp_mstr_read_holding_registers(VALUE self, VALUE slave,
                                     VALUE start_addr, VALUE nb)
 {
-    modbus_param_t *mb_param;
-    Data_Get_Struct(self, modbus_param_t, mb_param);
+    return mb_tcp_mstr_read_registers(self, slave, start_addr, nb,
+                                read_holding_registers);
+}
 
-    slave = rb_funcall(slave, rb_intern("to_i"), 0);
-    start_addr = rb_funcall(start_addr, rb_intern("to_i"), 0);
-    nb = rb_funcall(nb, rb_intern("to_i"), 0);
-    
-    uint16_t dest[FIX2INT(nb)];
-    int status = read_holding_registers(mb_param, FIX2INT(slave), FIX2INT(start_addr), FIX2INT(nb), dest);
-
-    if (status < 0) {
-        mb_tcp_raise_error(status);
-    }
-
-    int i;
-    VALUE ret = rb_ary_new();
-    for (i = 0; i < FIX2INT(nb); i++) {
-        rb_ary_push(ret, INT2FIX(dest[i]));
-    }
-    
-    return ret;
+VALUE mb_tcp_mstr_read_input_registers(VALUE self, VALUE slave,
+                                    VALUE start_addr, VALUE nb)
+{
+    return mb_tcp_mstr_read_registers(self, slave, start_addr, nb,
+                                read_input_registers);
 }
 
 VALUE mb_tcp_mstr_force_single_coil(VALUE self, VALUE slave,

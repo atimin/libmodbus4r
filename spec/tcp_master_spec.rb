@@ -1,5 +1,4 @@
 require 'modbus4r'
-require 'socket'
 
 describe ModBus::TCPMaster do
 

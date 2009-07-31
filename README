@@ -2,7 +2,7 @@
 
 Binding use *libmodbus* (free implementation of modbus for Linux\MacOS) for Ruby.
 
-== Futures
+== Features
 
 * Use only Ruby-1.9.x
 * Use C library *libmodbus*;
@@ -17,7 +17,7 @@ Binding use *libmodbus* (free implementation of modbus for Linux\MacOS) for Ruby
 * * force multiple coils (0x0F)
 * * preset multiple registers (0x10)
 
-== Install
+== Installation
 
 1. Install last release ruby 1.9.1 from http://ruby-lang.org
 2. Install libmodbus-2.0.3 from https://launchpad.net/libmodbus
@@ -26,7 +26,7 @@ Binding use *libmodbus* (free implementation of modbus for Linux\MacOS) for Ruby
    or
    *$ gem install libmodbus4r
 
-== Authorss
+== Authors
 
 Aleksey Timin <atimin@gmail.com> 
 

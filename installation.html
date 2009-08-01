@@ -8,8 +8,7 @@
     <meta name="author" content="Your Name / Design by Andreas Viklund - http://andreasviklund.com/" />
     <meta name="generator" content="webgen - http://webgen.rubyforge.com/" />
     <link rel="stylesheet" type="text/css" href="default.css" media="screen,projection" />
-
-    <title>About project</title>
+    <title>Installation</title>
   </head>
 
 <script type="text/javascript">
@@ -26,7 +25,6 @@ try {
     <div id="wrap">
 
       <div id="header">
-
         <p id="toplinks">
         Language: <span>en</span>
         </p>
@@ -35,40 +33,41 @@ try {
       </div>
 
       <div id="content">
-        <h2 id='about_project'>About project</h2>
+        <h2 id='installation'>Installation</h2>
 
-<p>libmodbus4r –a wrapper for library libmodbus wrote in Ruby. libmodbusbout project – a free implementation of protocol ModBus TCP\RTU for Linux and OSX operation systems. It&#8217;s very fast and stable library wrote in C. Goal of project is ability writing application in Ruby that use ModBus protocol for communication with devices.</p>
+      <div id="importan"> <strong> Importan! </strong> libmodbus4 work only in Linux и OSX</div>
 
-<h2 id='features'>Features:</h2>
+      <ol>
+        <li>
+            <p>If you not have interpritator Ruby-1.9.x download and read instruction of installation on <a href='http://ruby-lang.org'>official site</a></p>
+        </li>
 
-<ol>
-<li>Use wrote in C library - libmodbus;</li>
+        <li>
+            <p>Installation libmodbus from source</p>
 
-<li>Support only Ruby 1.9</li>
+            <div id="command">
+                <p> $ wget http://launchpad.net/libmodbus/trunk/2.0.3/+download/libmodbus-2.0.3.tar.gz </p>
+                <p> $ tar -xf libmodbus-2.0.3.tar.gz </p>
+                <p> $ cd libmodbus-2.0.3 </p>
+                <p> $ ./configure </p>
+                <p> $ make </p>
+                <p> $ sudo make install </p>
+            </div>
+        </li>
 
-<li>Implementation TCP master and RTU master;</li>
+        <li>
+        <p>Installation libmodbus4r Simplest installation is use rubygems</p>
 
-<li>Support function of protocol:</li>
-</ol>
+        <div id="command">
+            <p>$ sudo gem install libmodbus4r</p>
+        </div>
+            <p>or installation from source with command: </p>
+        <div id="command">
+            <p> $ sudo rake install </p>
+        </div>
+        </li>
+    </ol>
 
-<ul>
-<li>read coil status (0x01)</li>
-
-<li>read input status (0x02)</li>
-
-<li>read holding registers (0x03)</li>
-
-<li>read input registers (0x04)</li>
-
-<li>force single coil (0x05)</li>
-
-<li>preset single register (0x06)</li>
-
-<li>force multiple coils (0x0F)</li>
-
-<li>preset multiple registers (0x10)</li>
-
-</ul>
       </div>
 
       <div id="sidebar">
@@ -77,14 +76,12 @@ try {
 
         <h2>Pages:</h2>
         <div id="menu">
-
             <ul>
-                <li class="webgen-menu-level1 webgen-menu-item-selected"> <span>About project</span></li>
-                <li class="webgen-menu-level1"><a href="installation.html">Installation</a></li>
+                <li class="webgen-menu-level1"><a href="index.html">About project</a></li>
+                <li class="webgen-menu-level1 webgen-menu-item-selected"><span>Installation</span></li>
                 <li class="webgen-menu-level1"><a href="http://rubyforge.org/frs/?group_id=8789">Downloads</a></li>
                 <li class="webgen-menu-level1"><a href="http://github.com/flipback/libmodbus4r">Code</a></li>
             </ul>
-
         </div>
 
         <h2>Site news:</h2>
@@ -93,14 +90,12 @@ try {
 
         <h2>Links:</h2>
         <ul class="links">
-
           <li><a href="http://rubyforge.org/projects/libmodbus4r">Hosting on RubyForge</a></li>
           <li><a href="http://github.com/flipback/libmodbus4r">Hosting on GitHub</a></li>
           <li><a href="http://ruby-lang.org">Ruby site</a></li>
           <li><a href="https://launchpad.net/libmodbus">libmobus on Launchpad</a></li>
           <li><a href="http://www.modbus-ida.org">ModBus community</a></li>
         </ul>
-
       </div>
 
       <div id="footer">
@@ -114,12 +109,9 @@ try {
         google_ad_height = 90;
         //-->
     </script>
-
     <script type="text/javascript"
     src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
     </script>
- 
     </div>
   </body>
 </html>
-

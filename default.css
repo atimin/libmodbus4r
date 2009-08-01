@@ -194,10 +194,14 @@ margin:6px 18px 2px 5px;
     padding: 5px;
 }
 
-    #command{
+#command{
     background-color: #ffffdd;
     margin: 30px 5px 5px 30px;
     border: 1px solid black;
     padding: 15px 5px 0px 5px;
     line-height: 2px;
+}
+
+#google {
+    margin: 40px 0px 0px 150px;
 }

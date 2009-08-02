@@ -1,6 +1,6 @@
-== About
+== About project
 
-Binding use *libmodbus* (free implementation of modbus for Linux\MacOS) for Ruby.
+libmodbus4r –a wrapper for library libmodbus wrote in Ruby. libmodbus – a free implementation of protocol ModBus TCP\RTU for Linux and OSX operation systems. It's very fast and stable library wrote in C. Goal of project is ability writing application in Ruby that use ModBus protocol for communication with devices.Binding use *libmodbus* (free implementation of modbus for Linux\OSX) for Ruby.
 
 == Features
 
@@ -8,23 +8,32 @@ Binding use *libmodbus* (free implementation of modbus for Linux\MacOS) for Ruby
 * Use C library *libmodbus*;
 * ModBus TCP and RTU master(client);
 * Support functions: 
-* * read coil status (0x01)
-* * read input status (0x02)
-* * read holding registers (0x03)
-* * read input registers (0x04)
-* * force single coil (0x05)
-* * preset single register (0x06)
-* * force multiple coils (0x0F)
-* * preset multiple registers (0x10)
+  * read coil status (0x01)
+  * read input status (0x02)
+  * read holding registers (0x03)
+  * read input registers (0x04)
+  * force single coil (0x05)
+  * preset single register (0x06)
+  * force multiple coils (0x0F)
+  * preset multiple registers (0x10)
 
 == Installation
 
-1. Install last release ruby 1.9.1 from http://ruby-lang.org
-2. Install libmodbus-2.0.3 from https://launchpad.net/libmodbus
-3. Install libmodbus4r 
-   *$ sudo rake install*
-   or
-   *$ gem install libmodbus4r
+Importan! libmodbus4 work only in Linux и OSX
+
+1.If you not have interpritator Ruby-1.9.x download and read instruction of installation on official site http://ruby-lang.org
+2.Installation libmodbus from source
+    $ wget http://launchpad.net/libmodbus/trunk/2.0.3/+download/libmodbus-2.0.3.tar.gz
+    $ tar -xf libmodbus-2.0.3.tar.gz
+    $ cd libmodbus-2.0.3
+    $ ./configure
+    $ make
+    $ sudo make install
+3.Installation libmodbus4r
+    Simplest installation is use rubygems
+    $ sudo gem install libmodbus4r
+    or  installation from source with command:
+    $ sudo rake install
 
 == Authors
 
@@ -33,9 +42,13 @@ Aleksey Timin <atimin@gmail.com>
 == Refernces 
 
 Home page projects : http://flipback.github.com/libmodbus4r
+
 Hosting on RubyForge : http://rubyforge.org/projects/libmodbus4r
+
 Hosting on GitHub : http://github.com/flipback/libmodbus4r/tree/master
 
 Ruby site : http://ruby-lang.org
+
 libmobus on Launchpad : https://launchpad.net/libmodbus
+
 ModBus community: http://www.modbus-ida.org

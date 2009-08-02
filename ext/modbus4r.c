@@ -16,8 +16,9 @@ GNU General Public License for more details. */
 #include "master.h"
 #include "tcp_master.h"
 #include "rtu_master.h"
+#include "tcp_slave.h"
 
-VALUE mModBus, cMaster, cTCPMaster, cRTUMaster;
+VALUE mModBus, cMaster, cTCPMaster, cRTUMaster, cTCPSlave;
 
 void Init_modbus4r()
 {
@@ -51,6 +52,14 @@ void Init_modbus4r()
     /* RTUMaster */
     cRTUMaster = rb_define_class_under(mModBus, "RTUMaster", cMaster);
     rb_define_singleton_method(cRTUMaster, "new", mb_rtu_mstr_new, 5);
+
+    /* TCPSlave */
+    cTCPSlave = rb_define_class_under(mModBus, "TCPSlave", rb_cObject);
+    rb_define_singleton_method(cTCPSlave, "new", mb_tcp_sl_new, 3);
+    rb_define_method(cTCPSlave, "start", mb_tcp_sl_start, 0);
+    rb_define_method(cTCPSlave, "stop", mb_tco_sl_stop, 0);
+    rb_define_method(cTCPSlave, "stoped?", mb_tcp_sl_is_stoped, 0);
+    rb_define_method(cTCPSlave, "id", mb_tcp_sl_id, 0);
 
     /* Errors */
     mErrors = rb_define_module_under(mModBus, "Errors");

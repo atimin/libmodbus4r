@@ -15,15 +15,14 @@ GNU General Public License for more details. */
 
 typedef struct {
     int id;
-    modbus_param_t *mb_param;
+    modbus_param_t mb_param;
 } mb_tcp_sl_param_t;
 
 void mb_tcp_sl_free(mb_tcp_sl_param_t *mb_tcp_sl_param )
 {
-    modbus_close(mb_tcp_sl_param->mb_param);
-    free(mb_tcp_sl_param->mb_param);
+    modbus_close(&mb_tcp_sl_param->mb_param);
+    free(mb_tcp_sl_param);
 }
-
 
 VALUE mb_tcp_sl_new(VALUE self, VALUE ip_address, VALUE port, VALUE id)
 {
@@ -34,14 +33,13 @@ VALUE mb_tcp_sl_new(VALUE self, VALUE ip_address, VALUE port, VALUE id)
     port = rb_funcall(port, rb_intern("to_i"), 0);
     mb_tcp_sl_param->id = FIX2INT(rb_funcall(id, rb_intern("to_i"), 0));
 
-    modbus_init_tcp(mb_tcp_sl_param->mb_param, RSTRING_PTR(ip_address), FIX2INT(port));
+    modbus_init_tcp(&mb_tcp_sl_param->mb_param, RSTRING_PTR(ip_address), FIX2INT(port));
 
     return Data_Wrap_Struct(self, 0, mb_tcp_sl_free, mb_tcp_sl_param);
 }
 
 VALUE mb_tcp_sl_id(VALUE self)
 {
-    
     mb_tcp_sl_param_t *mb_tcp_sl_param;
     Data_Get_Struct(self, mb_tcp_sl_param_t, mb_tcp_sl_param);
 
@@ -52,6 +50,7 @@ VALUE mb_tcp_sl_start(VALUE self)
 {
     return self;
 }
+
 VALUE mb_tco_sl_stop(VALUE self)
 {
     return self;

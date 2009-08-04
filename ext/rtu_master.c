@@ -12,12 +12,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details. */
 
 #include "modbus4r.h"
-
-void mb_rtu_mstr_free(modbus_param_t *mb_param )
-{
-    modbus_close(mb_param);
-    free(mb_param);
-}
+#include "master.h"
 
 VALUE mb_rtu_mstr_new(VALUE self, VALUE device, VALUE baud, 
                             VALUE parity, VALUE data_bit, VALUE stop_bit)
@@ -34,5 +29,5 @@ VALUE mb_rtu_mstr_new(VALUE self, VALUE device, VALUE baud,
     modbus_init_rtu(mb_param, RSTRING_PTR(device), FIX2INT(baud),
                     RSTRING_PTR(parity), FIX2INT(data_bit), FIX2INT(stop_bit));
 
-    return Data_Wrap_Struct(self, 0, mb_rtu_mstr_free, mb_param);
+    return Data_Wrap_Struct(self, 0, mb_mstr_free, mb_param);
 }

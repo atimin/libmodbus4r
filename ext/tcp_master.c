@@ -12,12 +12,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details. */
 
 #include "modbus4r.h"
-
-void mb_tcp_mstr_free(modbus_param_t *mb_param )
-{
-    modbus_close(mb_param);
-    free(mb_param);
-}
+#include "master.h"
 
 VALUE mb_tcp_mstr_new(VALUE self, VALUE ip_address, VALUE port)
 {
@@ -29,5 +24,5 @@ VALUE mb_tcp_mstr_new(VALUE self, VALUE ip_address, VALUE port)
 
     modbus_init_tcp(mb_param, RSTRING_PTR(ip_address), FIX2INT(port));
 
-    return Data_Wrap_Struct(self, 0, mb_tcp_mstr_free, mb_param);
+    return Data_Wrap_Struct(self, 0, mb_mstr_free, mb_param);
 }

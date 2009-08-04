@@ -14,6 +14,13 @@ GNU General Public License for more details. */
 #include "modbus4r.h"
 #include "errors.h"
 
+void mb_mstr_free(modbus_param_t *mb_param )
+{
+    modbus_close(mb_param);
+    free(mb_param);
+}
+
+
 VALUE mb_mstr_is_closed(VALUE self)
 {
     modbus_param_t *mb_param;

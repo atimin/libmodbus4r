@@ -33,4 +33,5 @@ extern VALUE mb_mstr_force_multiple_coils(VALUE self, VALUE slave,
                                     VALUE start_addr, VALUE data);
 extern VALUE mb_mstr_preset_multiple_registers(VALUE self, VALUE slave,
                                     VALUE start_addr, VALUE data);
+extern void mb_mstr_free(modbus_param_t *mb_param );
 #endif 

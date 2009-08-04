@@ -51,7 +51,7 @@ VALUE mb_tcp_sl_start(VALUE self)
     return self;
 }
 
-VALUE mb_tco_sl_stop(VALUE self)
+VALUE mb_tcp_sl_stop(VALUE self)
 {
     return self;
 }

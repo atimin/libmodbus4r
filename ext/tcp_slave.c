@@ -14,7 +14,7 @@ GNU General Public License for more details. */
 #include "modbus4r.h"
 
 typedef struct {
-    int id;
+    VALUE id;
     modbus_param_t mb_param;
 } mb_tcp_sl_param_t;
 
@@ -31,7 +31,7 @@ VALUE mb_tcp_sl_new(VALUE self, VALUE ip_address, VALUE port, VALUE id)
     mb_tcp_sl_param = malloc(sizeof(mb_tcp_sl_param_t));
     ip_address = rb_funcall(ip_address, rb_intern("to_s"), 0);
     port = rb_funcall(port, rb_intern("to_i"), 0);
-    mb_tcp_sl_param->id = FIX2INT(rb_funcall(id, rb_intern("to_i"), 0));
+    mb_tcp_sl_param->id = rb_funcall(id, rb_intern("to_i"), 0);
 
     modbus_init_tcp(&mb_tcp_sl_param->mb_param, RSTRING_PTR(ip_address), FIX2INT(port));
 
@@ -43,7 +43,7 @@ VALUE mb_tcp_sl_id(VALUE self)
     mb_tcp_sl_param_t *mb_tcp_sl_param;
     Data_Get_Struct(self, mb_tcp_sl_param_t, mb_tcp_sl_param);
 
-    return  INT2FIX(mb_tcp_sl_param->id);
+    return  mb_tcp_sl_param->id;
 }
 
 VALUE mb_tcp_sl_start(VALUE self)

@@ -15,13 +15,21 @@ GNU General Public License for more details. */
 
 typedef struct {
     VALUE id;
+    VALUE slave_thread;
     modbus_param_t mb_param;
 } mb_tcp_sl_param_t;
 
 void mb_tcp_sl_free(mb_tcp_sl_param_t *mb_tcp_sl_param )
 {
     modbus_close(&mb_tcp_sl_param->mb_param);
+    rb_thread_kill(mb_tcp_sl_param->slave_thread);
     free(mb_tcp_sl_param);
+}
+
+VALUE mb_tcp_sl_thread()
+{
+    while (1)
+        continue;
 }
 
 VALUE mb_tcp_sl_new(VALUE self, VALUE ip_address, VALUE port, VALUE id)
@@ -47,12 +55,23 @@ VALUE mb_tcp_sl_id(VALUE self)
 }
 
 VALUE mb_tcp_sl_start(VALUE self)
-{
+{    
+    mb_tcp_sl_param_t *mb_tcp_sl_param;
+    Data_Get_Struct(self, mb_tcp_sl_param_t, mb_tcp_sl_param);
+
+    mb_tcp_sl_param->slave_thread = rb_thread_create(mb_tcp_sl_thread, NULL); 
+    mb_tcp_sl_param->slave_thread = rb_thread_run(mb_tcp_sl_param->slave_thread);
+
     return self;
 }
 
 VALUE mb_tcp_sl_stop(VALUE self)
 {
+    mb_tcp_sl_param_t *mb_tcp_sl_param;
+    Data_Get_Struct(self, mb_tcp_sl_param_t, mb_tcp_sl_param);
+
+    mb_tcp_sl_param->slave_thread = rb_thread_kill(mb_tcp_sl_param->slave_thread);
+
     return self;
 }
 

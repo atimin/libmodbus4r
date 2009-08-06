@@ -1,6 +1,6 @@
 == About project
 
-libmodbus4r –a wrapper for library libmodbus wrote in Ruby. libmodbus – a free implementation of protocol ModBus TCP\RTU for Linux and OSX operation systems. It's very fast and stable library wrote in C. Goal of project is ability writing application in Ruby that use ModBus protocol for communication with devices.Binding use *libmodbus* (free implementation of modbus for Linux\OSX) for Ruby.
+libmodbus4r –a wrapper for library libmodbus wrote in Ruby. libmodbus – a free implementation of protocol ModBus TCP\RTU for Linux and OSX operation systems. It's very fast and stable library wrote in C. Goal of project is ability writing application in Ruby that use ModBus protocol for communication with devices.
 
 == Features
 
@@ -26,7 +26,7 @@ Importan! libmodbus4 work only in Linux и OSX
     $ wget http://launchpad.net/libmodbus/trunk/2.0.3/+download/libmodbus-2.0.3.tar.gz
     $ tar -xf libmodbus-2.0.3.tar.gz
     $ cd libmodbus-2.0.3
-    $ ./configure
+    $ ./configure --prefix=/usr
     $ make
     $ sudo make install
 3.Installation libmodbus4r

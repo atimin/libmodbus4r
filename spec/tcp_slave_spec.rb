@@ -15,6 +15,8 @@ describe ModBus::TCPSlave do
 
   it "should not stoped" do
     @sl.stoped?.should == false
+    @sl.stop
+    @sl.stoped?.should == true
   end
 
   after(:all) do

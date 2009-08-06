@@ -11,22 +11,25 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details. */
 
+#include <pthread.h>
 #include "modbus4r.h"
+#include "errors.h"
 
 typedef struct {
     VALUE id;
-    VALUE slave_thread;
+    pthread_t sl_thread;
+    uint8_t sl_thr_stoped;
     modbus_param_t mb_param;
 } mb_tcp_sl_param_t;
 
 void mb_tcp_sl_free(mb_tcp_sl_param_t *mb_tcp_sl_param )
 {
     modbus_close(&mb_tcp_sl_param->mb_param);
-    rb_thread_kill(mb_tcp_sl_param->slave_thread);
+    pthread_cancel(mb_tcp_sl_param->sl_thread);
     free(mb_tcp_sl_param);
 }
 
-VALUE mb_tcp_sl_thread()
+void *mb_tcp_sl_thread(void *arg)
 {
     while (1)
         continue;
@@ -59,8 +62,13 @@ VALUE mb_tcp_sl_start(VALUE self)
     mb_tcp_sl_param_t *mb_tcp_sl_param;
     Data_Get_Struct(self, mb_tcp_sl_param_t, mb_tcp_sl_param);
 
-    mb_tcp_sl_param->slave_thread = rb_thread_create(mb_tcp_sl_thread, NULL); 
-    mb_tcp_sl_param->slave_thread = rb_thread_run(mb_tcp_sl_param->slave_thread);
+    int ret = pthread_create(&mb_tcp_sl_param->sl_thread, 
+            NULL, mb_tcp_sl_thread, NULL);
+    if (ret != 0) {
+        rb_raise(eModBusError, "Slave has't started (%i)", ret);
+    }
+
+    mb_tcp_sl_param->sl_thr_stoped = 0;
 
     return self;
 }
@@ -70,12 +78,24 @@ VALUE mb_tcp_sl_stop(VALUE self)
     mb_tcp_sl_param_t *mb_tcp_sl_param;
     Data_Get_Struct(self, mb_tcp_sl_param_t, mb_tcp_sl_param);
 
-    mb_tcp_sl_param->slave_thread = rb_thread_kill(mb_tcp_sl_param->slave_thread);
+    int ret = pthread_cancel(mb_tcp_sl_param->sl_thread);
+    if (ret != 0) {
+        rb_raise(eModBusError, "Slave has't stoped (%i)", ret);
+    }
 
+    mb_tcp_sl_param->sl_thr_stoped = 1;
     return self;
 }
 
 VALUE mb_tcp_sl_is_stoped(VALUE self)
 {
-    return Qtrue;
+    mb_tcp_sl_param_t *mb_tcp_sl_param;
+    Data_Get_Struct(self, mb_tcp_sl_param_t, mb_tcp_sl_param);
+
+
+    if (mb_tcp_sl_param->sl_thr_stoped) { 
+        return Qtrue;
+    }
+
+    return Qfalse;
 }

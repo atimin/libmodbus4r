@@ -1,4 +1,5 @@
 require 'modbus4r'
+require 'timeout'
 
 describe ModBus::TCPSlave do
   
@@ -15,8 +16,12 @@ describe ModBus::TCPSlave do
 
   it "should not stoped" do
     @sl.stoped?.should == false
-    @sl.stop
-    @sl.stoped?.should == true
+  end
+
+  it "should have stoped" do
+    sl = ModBus::TCPSlave.new('127.0.0.1', 1502, 1)
+    sl.start.stoped? == false
+    sl.stop.stoped? == true
   end
 
   after(:all) do

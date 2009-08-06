@@ -92,10 +92,19 @@ VALUE mb_tcp_sl_is_stoped(VALUE self)
     mb_tcp_sl_param_t *mb_tcp_sl_param;
     Data_Get_Struct(self, mb_tcp_sl_param_t, mb_tcp_sl_param);
 
-
     if (mb_tcp_sl_param->sl_thr_stoped) { 
         return Qtrue;
     }
 
     return Qfalse;
+}
+
+VALUE mb_tcp_sl_join(VALUE self)
+{
+    mb_tcp_sl_param_t *mb_tcp_sl_param;
+    Data_Get_Struct(self, mb_tcp_sl_param_t, mb_tcp_sl_param);
+
+    pthread_join(mb_tcp_sl_param->sl_thread, NULL);
+
+    return self;
 }

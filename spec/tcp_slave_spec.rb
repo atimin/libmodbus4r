@@ -5,14 +5,10 @@ describe ModBus::TCPSlave do
   
   before(:all) do
     @sl = ModBus::TCPSlave.new('127.0.0.1', 1502, 1)
-  end
-
-  it "should have slave id" do
-    @sl.id.should == 1
+    @sl.start
   end
 
   it "should not stoped" do
-    @sl.start
     @sl.stoped?.should == false
   end
 
@@ -20,7 +16,7 @@ describe ModBus::TCPSlave do
     sl = ModBus::TCPSlave.new('127.0.0.1', 1512, 1)
     sl.start.stoped? == false
     sl.stop.stoped? == true
-    sl.start.stoped? == false
+#    sl.start.stoped? == false
   end
 
   it "should open listen socket" do

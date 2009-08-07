@@ -14,6 +14,7 @@ GNU General Public License for more details. */
 #ifndef TCP_MASTER_H
 #define TCP_MASTER_H
 
-extern VALUE mb_tcp_mstr_new(VALUE self, VALUE ip_address, VALUE port);
+extern VALUE mb_tcp_mstr_new(VALUE self, 
+                VALUE ip_address, VALUE port, VALUE slave);
 
 #endif

@@ -14,15 +14,16 @@ GNU General Public License for more details. */
 #include "modbus4r.h"
 #include "master.h"
 
-VALUE mb_tcp_mstr_new(VALUE self, VALUE ip_address, VALUE port)
+VALUE mb_tcp_mstr_new(VALUE self, VALUE ip_address, VALUE port, VALUE slave)
 {
     modbus_param_t *mb_param;
 
     mb_param = malloc(sizeof(modbus_param_t));
     ip_address = rb_funcall(ip_address, rb_intern("to_s"), 0);
     port = rb_funcall(port, rb_intern("to_i"), 0);
+    slave = rb_funcall(slave, rb_intern("to_i"), 0);
 
-    modbus_init_tcp(mb_param, RSTRING_PTR(ip_address), FIX2INT(port));
+    modbus_init_tcp(mb_param, RSTRING_PTR(ip_address), FIX2INT(port), FIX2INT(slave));
 
     return Data_Wrap_Struct(self, 0, mb_mstr_free, mb_param);
 }

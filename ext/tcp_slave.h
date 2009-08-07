@@ -19,6 +19,5 @@ extern VALUE mb_tcp_sl_id(VALUE self);
 extern VALUE mb_tcp_sl_start(VALUE self);
 extern VALUE mb_tcp_sl_stop(VALUE self);
 extern VALUE mb_tcp_sl_is_stoped(VALUE self);
-extern VALUE mb_tcp_sl_join(VALUE self);
 
 #endif

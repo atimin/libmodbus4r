@@ -15,7 +15,8 @@ GNU General Public License for more details. */
 #include "master.h"
 
 VALUE mb_rtu_mstr_new(VALUE self, VALUE device, VALUE baud, 
-                            VALUE parity, VALUE data_bit, VALUE stop_bit)
+                            VALUE parity, VALUE data_bit, 
+                            VALUE stop_bit, VALUE slave)
 {
     modbus_param_t *mb_param;
 
@@ -25,9 +26,11 @@ VALUE mb_rtu_mstr_new(VALUE self, VALUE device, VALUE baud,
     parity = rb_funcall(parity, rb_intern("to_s"), 0);
     data_bit = rb_funcall(data_bit, rb_intern("to_i"), 0);
     stop_bit = rb_funcall(stop_bit, rb_intern("to_i"), 0);
+    slave = rb_funcall(slave, rb_intern("to_i"), 0);
 
     modbus_init_rtu(mb_param, RSTRING_PTR(device), FIX2INT(baud),
-                    RSTRING_PTR(parity), FIX2INT(data_bit), FIX2INT(stop_bit));
+                    RSTRING_PTR(parity), FIX2INT(data_bit),
+                    FIX2INT(stop_bit), FIX2INT(slave));
 
     return Data_Wrap_Struct(self, 0, mb_mstr_free, mb_param);
 }

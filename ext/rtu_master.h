@@ -15,6 +15,7 @@ GNU General Public License for more details. */
 #define RTU_MASTER_H
 
 extern VALUE mb_rtu_mstr_new(VALUE self, VALUE device, VALUE baud, 
-                            VALUE parity, VALUE data_bit, VALUE stop_bit);
+                            VALUE parity, VALUE data_bit, 
+                            VALUE stop_bit, VALUE slave);
 
 #endif

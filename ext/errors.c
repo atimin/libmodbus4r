@@ -52,23 +52,23 @@ void mb_raise_error(int exception)
         case GATEWAY_PROBLEM_TARGET:
             rb_raise(eGatewayProblemTarget, "Gateway problem target (%i)", GATEWAY_PROBLEM_TARGET);
             break;
-        case COMM_TIME_OUT:
-            rb_raise(eModBusError, "Communication timeout (%i)", COMM_TIME_OUT);
-            break;
-        case PORT_SOCKET_FAILURE:
-            rb_raise(eModBusError, "Port socket failure (%i)", PORT_SOCKET_FAILURE);
-            break;
-        case SELECT_FAILURE:
-            rb_raise(eModBusError, "Select failure (%i)", SELECT_FAILURE);
-            break;
-        case TOO_MANY_DATA:
-            rb_raise(eModBusError, "Too many data (%i)", TOO_MANY_DATA);
+        case INVALID_DATA:
+            rb_raise(eModBusError, "Invalid data (%i)", INVALID_DATA);
             break;
         case INVALID_CRC:
             rb_raise(eModBusError, "Invalid CRC (%i)", INVALID_CRC);
             break;
         case INVALID_EXCEPTION_CODE:
             rb_raise(eModBusError, "Invalid exception code (%i)", INVALID_EXCEPTION_CODE);
+            break;
+        case SELECT_TIMEOUT:
+            rb_raise(eModBusError, "Select timeout (%i)", SELECT_TIMEOUT);
+            break;
+        case SELECT_FAILURE:
+            rb_raise(eModBusError, "Select failure (%i)", SELECT_FAILURE);
+            break;
+         case SOCKET_FAILURE:
+            rb_raise(eModBusError, "Socket failure (%i)", SOCKET_FAILURE);
             break;
         case CONNECTION_CLOSED:
             rb_raise(eModBusError, "Connection closed (%i)", CONNECTION_CLOSED);

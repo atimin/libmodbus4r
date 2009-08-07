@@ -53,19 +53,17 @@ VALUE mb_mstr_close(VALUE self)
     return self;
 }
 
-VALUE mb_mstr_read_coil(VALUE self, VALUE slave, 
-                    VALUE start_addr, VALUE nb, 
-                    int (*func)(modbus_param_t*, int, int, int, uint8_t*))
+VALUE mb_mstr_read_coil(VALUE self, VALUE start_addr, VALUE nb, 
+                    int (*func)(modbus_param_t*, int, int, uint8_t*))
 {
     modbus_param_t *mb_param;
     Data_Get_Struct(self, modbus_param_t, mb_param);
 
-    slave = rb_funcall(slave, rb_intern("to_i"), 0);
     start_addr = rb_funcall(start_addr, rb_intern("to_i"), 0);
     nb = rb_funcall(nb, rb_intern("to_i"), 0);
     
     uint8_t dest[FIX2INT(nb)];
-    int status = (*func)(mb_param, FIX2INT(slave), FIX2INT(start_addr), FIX2INT(nb), dest);
+    int status = (*func)(mb_param, FIX2INT(start_addr), FIX2INT(nb), dest);
 
     if (status < 0) {
         mb_raise_error(status);
@@ -80,33 +78,27 @@ VALUE mb_mstr_read_coil(VALUE self, VALUE slave,
     return ret;
 }
 
-VALUE mb_mstr_read_coil_status(VALUE self, VALUE slave, 
-                                    VALUE start_addr, VALUE nb)
+VALUE mb_mstr_read_coil_status(VALUE self, VALUE start_addr, VALUE nb)
 {
-    return mb_mstr_read_coil(self, slave, start_addr, nb, 
-                            read_coil_status);
+    return mb_mstr_read_coil(self, start_addr, nb, read_coil_status);
 }
 
-VALUE mb_mstr_read_input_status(VALUE self, VALUE slave,
-                                    VALUE start_addr, VALUE nb)
+VALUE mb_mstr_read_input_status(VALUE self, VALUE start_addr, VALUE nb)
 {
-    return mb_mstr_read_coil(self, slave, start_addr, nb, 
-                            read_coil_status);
+    return mb_mstr_read_coil(self, start_addr, nb, read_coil_status);
 }
 
-VALUE mb_mstr_read_registers(VALUE self, VALUE slave,
-                    VALUE start_addr, VALUE nb,
-                    int (*func)(modbus_param_t*, int, int, int, uint16_t*))
+VALUE mb_mstr_read_registers(VALUE self, VALUE start_addr, VALUE nb,
+                    int (*func)(modbus_param_t*, int, int, uint16_t*))
 {
     modbus_param_t *mb_param;
     Data_Get_Struct(self, modbus_param_t, mb_param);
 
-    slave = rb_funcall(slave, rb_intern("to_i"), 0);
     start_addr = rb_funcall(start_addr, rb_intern("to_i"), 0);
     nb = rb_funcall(nb, rb_intern("to_i"), 0);
     
     uint16_t dest[FIX2INT(nb)];
-    int status = (*func)(mb_param, FIX2INT(slave), FIX2INT(start_addr), FIX2INT(nb), dest);
+    int status = (*func)(mb_param, FIX2INT(start_addr), FIX2INT(nb), dest);
 
     if (status < 0) {
         mb_raise_error(status);
@@ -122,30 +114,26 @@ VALUE mb_mstr_read_registers(VALUE self, VALUE slave,
     return ret;
 }
 
-VALUE mb_mstr_read_holding_registers(VALUE self, VALUE slave,
-                                    VALUE start_addr, VALUE nb)
+VALUE mb_mstr_read_holding_registers(VALUE self, VALUE start_addr, VALUE nb)
 {
-    return mb_mstr_read_registers(self, slave, start_addr, nb,
+    return mb_mstr_read_registers(self, start_addr, nb,
                                 read_holding_registers);
 }
 
-VALUE mb_mstr_read_input_registers(VALUE self, VALUE slave,
-                                    VALUE start_addr, VALUE nb)
+VALUE mb_mstr_read_input_registers(VALUE self, VALUE start_addr, VALUE nb)
 {
-    return mb_mstr_read_registers(self, slave, start_addr, nb,
+    return mb_mstr_read_registers(self, start_addr, nb,
                                 read_input_registers);
 }
 
-VALUE mb_mstr_force_single_coil(VALUE self, VALUE slave,
-                                    VALUE coil_addr, VALUE state)
+VALUE mb_mstr_force_single_coil(VALUE self, VALUE coil_addr, VALUE state)
 {
     modbus_param_t *mb_param;
     Data_Get_Struct(self, modbus_param_t, mb_param);
 
-    slave = rb_funcall(slave, rb_intern("to_i"), 0);
     coil_addr = rb_funcall(coil_addr, rb_intern("to_i"), 0);
 
-    int status = force_single_coil(mb_param, FIX2INT(slave), FIX2INT(coil_addr), (state == Qfalse ? 0 : 1));
+    int status = force_single_coil(mb_param, FIX2INT(coil_addr), (state == Qfalse ? 0 : 1));
 
     if (status < 0) {
         mb_raise_error(status);
@@ -155,17 +143,15 @@ VALUE mb_mstr_force_single_coil(VALUE self, VALUE slave,
 }
 
 
-VALUE mb_mstr_preset_single_register(VALUE self, VALUE slave,
-                                    VALUE reg_addr, VALUE value)
+VALUE mb_mstr_preset_single_register(VALUE self, VALUE reg_addr, VALUE value)
 {
     modbus_param_t *mb_param;
     Data_Get_Struct(self, modbus_param_t, mb_param);
 
-    slave = rb_funcall(slave, rb_intern("to_i"), 0);
     reg_addr = rb_funcall(reg_addr, rb_intern("to_i"), 0);
     value = rb_funcall(value, rb_intern("to_i"), 0);
 
-    int status = preset_single_register(mb_param, FIX2INT(slave), FIX2INT(reg_addr), FIX2INT(value));
+    int status = preset_single_register(mb_param, FIX2INT(reg_addr), FIX2INT(value));
 
     if (status < 0) {
         mb_raise_error(status);
@@ -174,13 +160,11 @@ VALUE mb_mstr_preset_single_register(VALUE self, VALUE slave,
     return self;
 }
 
-VALUE mb_mstr_force_multiple_coils(VALUE self, VALUE slave, 
-                                    VALUE start_addr, VALUE data) 
+VALUE mb_mstr_force_multiple_coils(VALUE self, VALUE start_addr, VALUE data) 
 {
     modbus_param_t *mb_param;
     Data_Get_Struct(self, modbus_param_t, mb_param);
 
-    slave = rb_funcall(slave, rb_intern("to_i"), 0);
     start_addr = rb_funcall(start_addr, rb_intern("to_i"), 0);
     data = rb_funcall(data, rb_intern("to_a"), 0);
 
@@ -193,7 +177,7 @@ VALUE mb_mstr_force_multiple_coils(VALUE self, VALUE slave,
         ary++;
     }
 
-    int status = force_multiple_coils(mb_param, FIX2INT(slave), FIX2INT(start_addr), RARRAY_LEN(data), buf);
+    int status = force_multiple_coils(mb_param, FIX2INT(start_addr), RARRAY_LEN(data), buf);
 
     if (status < 0) {
         mb_raise_error(status);
@@ -202,13 +186,11 @@ VALUE mb_mstr_force_multiple_coils(VALUE self, VALUE slave,
     return self;
 }
 
-VALUE mb_mstr_preset_multiple_registers(VALUE self, VALUE slave,
-                                    VALUE start_addr, VALUE data)
+VALUE mb_mstr_preset_multiple_registers(VALUE self, VALUE start_addr, VALUE data)
 {
     modbus_param_t *mb_param;
     Data_Get_Struct(self, modbus_param_t, mb_param);
 
-    slave = rb_funcall(slave, rb_intern("to_i"), 0);
     start_addr = rb_funcall(start_addr, rb_intern("to_i"), 0);
     data = rb_funcall(data, rb_intern("to_a"), 0);
 
@@ -222,7 +204,7 @@ VALUE mb_mstr_preset_multiple_registers(VALUE self, VALUE slave,
         ary++;
     }
 
-    int status = preset_multiple_registers(mb_param, FIX2INT(slave), FIX2INT(start_addr), RARRAY_LEN(data), buf);
+    int status = preset_multiple_registers(mb_param, FIX2INT(start_addr), RARRAY_LEN(data), buf);
 
     if (status < 0) {
         mb_raise_error(status);

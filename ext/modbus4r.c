@@ -29,29 +29,29 @@ void Init_modbus4r()
     rb_define_method(cMaster, "connect", mb_mstr_connect, 0);
     rb_define_method(cMaster, "close", mb_mstr_close, 0);
     rb_define_method(cMaster, "read_coil_status", 
-                    mb_mstr_read_coil_status, 3);
+                    mb_mstr_read_coil_status, 2);
     rb_define_method(cMaster, "read_input_status",
-                    mb_mstr_read_input_status, 3);
+                    mb_mstr_read_input_status, 2);
     rb_define_method(cMaster, "read_holding_registers", 
-                    mb_mstr_read_holding_registers, 3);
+                    mb_mstr_read_holding_registers, 2);
     rb_define_method(cMaster, "read_input_registers", 
-                    mb_mstr_read_holding_registers, 3);
+                    mb_mstr_read_holding_registers, 2);
     rb_define_method(cMaster, "force_single_coil", 
-                    mb_mstr_force_single_coil, 3);
+                    mb_mstr_force_single_coil, 2);
     rb_define_method(cMaster, "preset_single_register", 
-                    mb_mstr_preset_single_register, 3);
+                    mb_mstr_preset_single_register, 2);
     rb_define_method(cMaster, "force_multiple_coils", 
-                    mb_mstr_force_multiple_coils, 3);
+                    mb_mstr_force_multiple_coils, 2);
     rb_define_method(cMaster, "preset_multiple_registers", 
-                    mb_mstr_preset_multiple_registers, 3);
+                    mb_mstr_preset_multiple_registers, 2);
 
     /* TCPMaster */
     cTCPMaster = rb_define_class_under(mModBus, "TCPMaster", cMaster);
-    rb_define_singleton_method(cTCPMaster, "new", mb_tcp_mstr_new, 2);
+    rb_define_singleton_method(cTCPMaster, "new", mb_tcp_mstr_new, 3);
 
     /* RTUMaster */
     cRTUMaster = rb_define_class_under(mModBus, "RTUMaster", cMaster);
-    rb_define_singleton_method(cRTUMaster, "new", mb_rtu_mstr_new, 5);
+    rb_define_singleton_method(cRTUMaster, "new", mb_rtu_mstr_new, 6);
 
     /* TCPSlave */
     cTCPSlave = rb_define_class_under(mModBus, "TCPSlave", rb_cObject);
@@ -60,7 +60,6 @@ void Init_modbus4r()
     rb_define_method(cTCPSlave, "stop", mb_tcp_sl_stop, 0);
     rb_define_method(cTCPSlave, "stoped?", mb_tcp_sl_is_stoped, 0);
     rb_define_method(cTCPSlave, "id", mb_tcp_sl_id, 0);
-    rb_define_method(cTCPSlave, "join", mb_tcp_sl_join, 0);
 
     /* Errors */
     mErrors = rb_define_module_under(mModBus, "Errors");

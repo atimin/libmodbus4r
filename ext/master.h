@@ -17,21 +17,21 @@ GNU General Public License for more details. */
 extern VALUE mb_mstr_is_closed(VALUE self);
 extern VALUE mb_mstr_connect(VALUE self);
 extern VALUE mb_mstr_close(VALUE self);
-extern VALUE mb_mstr_read_coil_status(VALUE self, VALUE slave, 
+extern VALUE mb_mstr_read_coil_status(VALUE self,  
                                     VALUE start_addr, VALUE nb);
-extern VALUE mb_mstr_read_input_status(VALUE self, VALUE slave,
+extern VALUE mb_mstr_read_input_status(VALUE self,
                                     VALUE start_addr, VALUE nb);
-extern VALUE mb_mstr_read_holding_registers(VALUE self, VALUE slave,
+extern VALUE mb_mstr_read_holding_registers(VALUE self,
                                     VALUE start_addr, VALUE nb);
-extern VALUE mb_mstr_read_input_registers(VALUE self, VALUE slave,
+extern VALUE mb_mstr_read_input_registers(VALUE self,
                                     VALUE start_addr, VALUE nb);
-extern VALUE mb_mstr_force_single_coil(VALUE self, VALUE slave,
+extern VALUE mb_mstr_force_single_coil(VALUE self, 
                                     VALUE coil_addr, VALUE state);
-extern VALUE mb_mstr_preset_single_register(VALUE self, VALUE slave,
+extern VALUE mb_mstr_preset_single_register(VALUE self, 
                                     VALUE reg_addr, VALUE value);
-extern VALUE mb_mstr_force_multiple_coils(VALUE self, VALUE slave, 
+extern VALUE mb_mstr_force_multiple_coils(VALUE self,  
                                     VALUE start_addr, VALUE data);
-extern VALUE mb_mstr_preset_multiple_registers(VALUE self, VALUE slave,
+extern VALUE mb_mstr_preset_multiple_registers(VALUE self,
                                     VALUE start_addr, VALUE data);
 extern void mb_mstr_free(modbus_param_t *mb_param );
 #endif 

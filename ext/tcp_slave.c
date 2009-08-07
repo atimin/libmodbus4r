@@ -34,14 +34,6 @@ VALUE mb_tcp_sl_new(VALUE self, VALUE ip_address, VALUE port, VALUE slave)
     return Data_Wrap_Struct(self, 0, mb_tcp_sl_free, mb_param);
 }
 
-VALUE mb_tcp_sl_id(VALUE self)
-{
-    modbus_param_t *mb_param;
-    Data_Get_Struct(self, modbus_param_t, mb_param);
-
-    return  INT2FIX(mb_param->slave);
-}
-
 VALUE mb_tcp_sl_start(VALUE self)
 {    
     modbus_param_t *mb_param;

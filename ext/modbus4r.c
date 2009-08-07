@@ -59,7 +59,6 @@ void Init_modbus4r()
     rb_define_method(cTCPSlave, "start", mb_tcp_sl_start, 0);
     rb_define_method(cTCPSlave, "stop", mb_tcp_sl_stop, 0);
     rb_define_method(cTCPSlave, "stoped?", mb_tcp_sl_is_stoped, 0);
-    rb_define_method(cTCPSlave, "id", mb_tcp_sl_id, 0);
 
     /* Errors */
     mErrors = rb_define_module_under(mModBus, "Errors");

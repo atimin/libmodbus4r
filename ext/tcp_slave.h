@@ -15,7 +15,6 @@ GNU General Public License for more details. */
 #define TCP_SLAVE_H
 
 extern VALUE mb_tcp_sl_new(VALUE self, VALUE ip_address, VALUE port, VALUE id);
-extern VALUE mb_tcp_sl_id(VALUE self);
 extern VALUE mb_tcp_sl_start(VALUE self);
 extern VALUE mb_tcp_sl_stop(VALUE self);
 extern VALUE mb_tcp_sl_is_stoped(VALUE self);

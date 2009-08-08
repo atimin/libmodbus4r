@@ -94,10 +94,5 @@ VALUE mb_tcp_sl_is_stoped(VALUE self)
     modbus_slave_t *mb_slave;
     Data_Get_Struct(self, modbus_slave_t, mb_slave);
 
-    if (read(mb_slave->mb_param.fd, NULL, 0) 
-        || mb_slave->mb_param.fd == 0) { 
-        return Qtrue;
-    }
-
-    return Qfalse;
+    return mb_slave->is_stoped ? Qtrue : Qfalse;
 }

@@ -11,5 +11,5 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details. 
 
-require 'rmodbus4r/rmodbus4r'
+require 'modbus4r/modbus4r'
 

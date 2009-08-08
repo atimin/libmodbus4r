@@ -44,6 +44,6 @@ task :make do
   cd 'ext' do
     ruby 'extconf.rb'
     sh 'make'
-    cp 'modbus4r.so', '../lib/'
+    mv 'modbus4r.so', '../lib/modbus4r/'
   end
 end

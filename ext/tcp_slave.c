@@ -17,7 +17,6 @@ GNU General Public License for more details. */
 
 typedef struct {
     pthread_t tid;
-    uint8_t is_stoped;
     int listen_sock;
     modbus_param_t mb_param;
     modbus_mapping_t mb_map;
@@ -56,8 +55,6 @@ VALUE mb_tcp_sl_new(VALUE self, VALUE ip_address, VALUE port, VALUE slave)
     if (ret < 0) {
         rb_raise(rb_eStandardError, "Memory allocation failed");
     }
-
-    mb_slave->is_stoped = 1;
     
     return Data_Wrap_Struct(self, 0, mb_tcp_sl_free, mb_slave);
 }
@@ -73,8 +70,6 @@ VALUE mb_tcp_sl_start(VALUE self)
         rb_raise(rb_eStandardError, "Slave has not started");
     }
     
-    mb_slave->is_stoped = 0;
-    
     return self;
 }
 
@@ -89,7 +84,6 @@ VALUE mb_tcp_sl_stop(VALUE self)
     }
     
     close(mb_slave->listen_sock);
-    mb_slave->is_stoped = 1;
 
     return self;
 }
@@ -99,5 +93,8 @@ VALUE mb_tcp_sl_is_stoped(VALUE self)
     modbus_slave_t *mb_slave;
     Data_Get_Struct(self, modbus_slave_t, mb_slave);
 
-    return mb_slave->is_stoped ? Qtrue : Qfalse;
+    if (read(mb_slave->listen_sock, NULL, 0) || mb_slave->listen_sock == 0) { 
+        return Qtrue;
+    }
+    return Qfalse;
 }

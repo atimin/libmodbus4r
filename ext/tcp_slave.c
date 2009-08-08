@@ -18,6 +18,7 @@ GNU General Public License for more details. */
 typedef struct {
     pthread_t tid;
     uint8_t is_stoped;
+    int listen_sock;
     modbus_param_t mb_param;
     modbus_mapping_t mb_map;
 } modbus_slave_t;
@@ -32,7 +33,10 @@ void mb_tcp_sl_free(modbus_slave_t *mb_slave)
 void *mb_serv(void *arg)
 {
     modbus_slave_t *mb_slave = (modbus_slave_t *)arg;
-        
+
+    mb_slave->listen_sock = modbus_slave_listen_tcp(&mb_slave->mb_param, 1);
+    modbus_slave_accept_tcp(&mb_slave->mb_param, &mb_slave->listen_sock);
+
     while(1)
         continue;
 }
@@ -84,6 +88,7 @@ VALUE mb_tcp_sl_stop(VALUE self)
         rb_raise(rb_eStandardError, "Slave has not stoped");
     }
     
+    close(mb_slave->listen_sock);
     mb_slave->is_stoped = 1;
 
     return self;

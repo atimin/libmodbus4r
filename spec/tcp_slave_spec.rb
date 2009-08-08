@@ -20,7 +20,7 @@ describe ModBus::TCPSlave do
   end
 
   it "should open listen socket" do
-    mstr = ModBus::TCPMaster.new('127.0.0.1', 1502)
+    mstr = ModBus::TCPMaster.new('127.0.0.1', 1502, 1)
     mstr.connect.closed?.should == false
     mstr.close
   end

@@ -1,8 +1,0 @@
-# -*- coding: utf-8 -*-
-
-2009-07-30 Timin Aleksey <atimin@gmail.com>
-	* ext/master.c, ext/master.h, ext/tcp_master.c, ext/tcp_master.h, ext/rtu_master.c, ext/rtu_master,h :	Create base Master class for TCPMaster and RTUMaster
-	* ext/error.c ext/error.h : Add suppot all exception of libmodbus
-	* spec/rtu_master_spec.rb: Add test for RTUMaster, but it not run!
-	* ChageLog: Start log of shanges.
-

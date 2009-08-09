@@ -23,12 +23,11 @@ Importan! libmodbus4 work only in Linux и OSX
 
 1.If you not have interpritator Ruby-1.9.x download and read instruction of installation on official site http://ruby-lang.org
 2.Installation libmodbus from source
-    $ wget http://launchpad.net/libmodbus/trunk/2.0.3/+download/libmodbus-2.0.3.tar.gz
-    $ tar -xf libmodbus-2.0.3.tar.gz
-    $ cd libmodbus-2.0.3
-    $ ./configure --prefix=/usr
-    $ make
-    $ sudo make install
+    $ bzr branch lp:libmodbus
+    $ cd libmodbus/
+    $ ./waf --prefix=/usr
+    $ ./waf build
+    $ sudo ./waf install
 3.Installation libmodbus4r
     Simplest installation is use rubygems
     $ sudo gem install libmodbus4r

@@ -31,16 +31,20 @@ describe ModBus::TCPSlave do
     mstr.connect
 
     @sl.coil_status.should == []
-    @sl.coild_status = [false, true, false]
+    @sl.coil_status = [false, true, false]
     
     mstr.read_coil_status(0, 3).should == [false, true, false]
     mstr.force_single_coil(1, false)
      
     @sl.coil_status.should == [false, false ,false]
      
-    mstr.force_multiple_registers(0, [true, true, true])
+    mstr.force_multiple_coils(0, [true, true, true])
 
     @sl.coil_status.should == [true, true, true]
+
+    @sl.coil_status[1] = false
+    @sl.coil_status.should == [true, false, true]
+    mstr.read_coil_status(0, 3).should == [true, false, true]
   end
 
   after(:each) do

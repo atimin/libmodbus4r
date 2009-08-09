@@ -11,6 +11,7 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details. */
 
+#include <unistd.h>
 #include "modbus4r.h"
 #include "errors.h"
 
@@ -85,7 +86,7 @@ VALUE mb_mstr_read_coil_status(VALUE self, VALUE start_addr, VALUE nb)
 
 VALUE mb_mstr_read_input_status(VALUE self, VALUE start_addr, VALUE nb)
 {
-    return mb_mstr_read_coil(self, start_addr, nb, read_coil_status);
+    return mb_mstr_read_coil(self, start_addr, nb, read_input_status);
 }
 
 VALUE mb_mstr_read_registers(VALUE self, VALUE start_addr, VALUE nb,

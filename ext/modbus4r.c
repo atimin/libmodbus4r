@@ -59,9 +59,14 @@ void Init_modbus4r()
     rb_define_method(cTCPSlave, "start", mb_tcp_sl_start, 0);
     rb_define_method(cTCPSlave, "stop", mb_tcp_sl_stop, 0);
     rb_define_method(cTCPSlave, "stoped?", mb_tcp_sl_is_stoped, 0);
-    rb_define_method(cTCPSlave, "coil_status", mb_tcp_sl_get_coil_status, 0);
-    rb_define_method(cTCPSlave, "coil_status=", mb_tcp_sl_set_coil_status, 1);
-
+    rb_define_method(cTCPSlave, "coil_status", 
+                                mb_tcp_sl_get_coil_status, 0);
+    rb_define_method(cTCPSlave, "coil_status=", 
+                                mb_tcp_sl_set_coil_status, 1);
+    rb_define_method(cTCPSlave, "input_status", 
+                                mb_tcp_sl_get_input_status, 0);
+    rb_define_method(cTCPSlave, "input_status=", 
+                                mb_tcp_sl_set_input_status, 1);
     /* Errors */
     mErrors = rb_define_module_under(mModBus, "Errors");
     eModBusError = rb_define_class_under(mErrors, "ModBusError", 

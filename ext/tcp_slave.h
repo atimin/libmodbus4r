@@ -20,5 +20,7 @@ extern VALUE mb_tcp_sl_stop(VALUE self);
 extern VALUE mb_tcp_sl_is_stoped(VALUE self);
 extern VALUE mb_tcp_sl_get_coil_status(VALUE self);
 extern VALUE mb_tcp_sl_set_coil_status(VALUE self, VALUE value);
+extern VALUE mb_tcp_sl_get_input_status(VALUE self);
+extern VALUE mb_tcp_sl_set_input_status(VALUE self, VALUE value);
 
 #endif

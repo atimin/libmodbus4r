@@ -22,6 +22,7 @@ typedef struct {
     modbus_param_t *mb_param;
     modbus_mapping_t *mb_map;
     VALUE coil_status;
+    VALUE input_status;
 } modbus_slave_t;
 
 void mb_tcp_sl_free(modbus_slave_t *mb_slave)
@@ -60,7 +61,22 @@ void mb_pull_coil_status(modbus_slave_t *mb_slave)
        *ptr_coil = (*ptr_map == 0 ? Qfalse : Qtrue);
        ptr_coil++;
     }
+}
 
+void mb_push_input_status(modbus_slave_t *mb_slave)
+{
+    int len = RARRAY_LEN(mb_slave->input_status);
+    VALUE *inputs = RARRAY_PTR(mb_slave->input_status);
+    mb_slave->mb_map->nb_input_status = len; 
+    mb_slave->mb_map->tab_input_status = malloc(sizeof(uint8_t) * len);
+    uint8_t *ptr = mb_slave->mb_map->tab_input_status;
+
+    int i;
+    for (i = 0; i < len; i++) {
+        *ptr = (*inputs == Qtrue ? 1 : 0);
+        ptr++;
+        inputs++;
+    }
 }
 
 void *mb_serv(void *arg)
@@ -81,6 +97,7 @@ void *mb_serv(void *arg)
 
             if (ret == 0) {
                 mb_push_coil_status(mb_slave);
+                mb_push_input_status(mb_slave);
                 modbus_slave_manage(mb_slave->mb_param, query, 
                                     query_size, mb_slave->mb_map);
                 mb_pull_coil_status(mb_slave);
@@ -112,6 +129,7 @@ VALUE mb_tcp_sl_new(VALUE self, VALUE ip_address, VALUE port, VALUE slave)
     }
     
     mb_slave->coil_status = rb_ary_new();
+    mb_slave->input_status = rb_ary_new();
 
     return Data_Wrap_Struct(self, 0, mb_tcp_sl_free, mb_slave);
 }
@@ -174,6 +192,24 @@ VALUE mb_tcp_sl_set_coil_status(VALUE self, VALUE value)
     value = rb_funcall(value, rb_intern("to_a"), 0);
     mb_slave->coil_status = rb_funcall(value, rb_intern("dup"), 0);
     
-        
     return mb_slave->coil_status;
+}
+
+VALUE mb_tcp_sl_get_input_status(VALUE self)
+{
+    modbus_slave_t *mb_slave;
+    Data_Get_Struct(self, modbus_slave_t, mb_slave);
+
+    return mb_slave->input_status;
+}
+
+VALUE mb_tcp_sl_set_input_status(VALUE self, VALUE value)
+{
+    modbus_slave_t *mb_slave;
+    Data_Get_Struct(self, modbus_slave_t, mb_slave);
+
+    value = rb_funcall(value, rb_intern("to_a"), 0);
+    mb_slave->input_status = rb_funcall(value, rb_intern("dup"), 0);
+        
+    return mb_slave->input_status;
 }

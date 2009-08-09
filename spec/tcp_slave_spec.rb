@@ -47,6 +47,22 @@ describe ModBus::TCPSlave do
     mstr.read_coil_status(0, 3).should == [true, false, true]
   end
 
+  it "should have input status" do
+    mstr = ModBus::TCPMaster.new('127.0.0.1', 1502, 1)
+    mstr.connect
+    
+    @sl.input_status.should == []
+    @sl.input_status = [false, false, false]
+    @sl.input_status.should == [false, false, false]
+
+    mstr.read_input_status(0, 3).should == [false, false, false]
+
+    @sl.input_status[1] = true
+    @sl.input_status.should == [false, true, false]
+
+    mstr.read_input_status(0, 3).should  == [false, true, false]
+  end
+
   after(:each) do
     @sl.stop unless @sl.stoped?
   end

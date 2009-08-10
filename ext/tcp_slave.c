@@ -24,6 +24,7 @@ typedef struct {
     VALUE coil_status;
     VALUE input_status;
     VALUE holding_registers;
+    VALUE input_registers;
 } modbus_slave_t;
 
 void mb_tcp_sl_free(modbus_slave_t *mb_slave)
@@ -110,6 +111,22 @@ void mb_pull_holding_registers(modbus_slave_t *mb_slave)
     }
 }
 
+void mb_push_input_registers(modbus_slave_t *mb_slave)
+{
+    int len = RARRAY_LEN(mb_slave->input_registers);
+    VALUE *regs = RARRAY_PTR(mb_slave->input_registers);
+    mb_slave->mb_map->nb_input_registers = len; 
+    mb_slave->mb_map->tab_input_registers = malloc(sizeof(uint16_t) * len);
+    uint16_t *ptr = mb_slave->mb_map->tab_input_registers;
+
+    int i;
+    for (i = 0; i < len; i++) {
+        *regs = rb_funcall(*regs, rb_intern("to_i"), 0);
+        *ptr = FIX2INT(*regs);
+        ptr++;
+        regs++;
+    }
+}
 
 void *mb_serv(void *arg)
 {
@@ -131,6 +148,7 @@ void *mb_serv(void *arg)
                 mb_push_coil_status(mb_slave);
                 mb_push_input_status(mb_slave);
                 mb_push_holding_registers(mb_slave);
+                mb_push_input_registers(mb_slave);
 
                 modbus_slave_manage(mb_slave->mb_param, query, 
                                     query_size, mb_slave->mb_map);
@@ -167,6 +185,9 @@ VALUE mb_tcp_sl_new(VALUE self, VALUE ip_address, VALUE port, VALUE slave)
     mb_slave->coil_status = rb_ary_new();
     mb_slave->input_status = rb_ary_new();
     mb_slave->holding_registers = rb_ary_new();
+    mb_slave->input_registers = rb_ary_new();
+
+    modbus_set_debug(mb_slave, 1);
 
     return Data_Wrap_Struct(self, 0, mb_tcp_sl_free, mb_slave);
 }
@@ -268,5 +289,23 @@ VALUE mb_tcp_sl_set_holding_registers(VALUE self, VALUE value)
     mb_slave->holding_registers = rb_funcall(value, rb_intern("dup"), 0);
         
     return mb_slave->holding_registers;
+}
 
+VALUE mb_tcp_sl_get_input_registers(VALUE self)
+{
+    modbus_slave_t *mb_slave;
+    Data_Get_Struct(self, modbus_slave_t, mb_slave);
+
+    return mb_slave->input_registers;
+}
+
+VALUE mb_tcp_sl_set_input_registers(VALUE self, VALUE value)
+{
+    modbus_slave_t *mb_slave;
+    Data_Get_Struct(self, modbus_slave_t, mb_slave);
+
+    value = rb_funcall(value, rb_intern("to_a"), 0);
+    mb_slave->input_registers = rb_funcall(value, rb_intern("dup"), 0);
+        
+    return mb_slave->input_registers;
 }

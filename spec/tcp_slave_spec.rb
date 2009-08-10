@@ -1,5 +1,4 @@
 require 'modbus4r'
-require 'timeout'
 
 describe ModBus::TCPSlave do
   
@@ -13,19 +12,15 @@ describe ModBus::TCPSlave do
   it "should have stoped" do
     sl = ModBus::TCPSlave.new('127.0.0.1', 1512, 1)
     sl.start.stoped? == false
+
+
+    mstr = ModBus::TCPMaster.new('127.0.0.1', 1512, 1)
+    mstr.connect.closed?.should == false
+
     sl.stop.stoped? == true
+    lambda { mstr.connect }.should raise_error(ModBus::Errors::ModBusError)
     sl.start.stoped? == false
   end
-
-  it "should open listen socket" do
-    mstr = ModBus::TCPMaster.new('127.0.0.1', 1502, 1)
-    mstr.connect.closed?.should == false
-    mstr.close
-
-    @sl.stop
-    lambda { mstr.connect }.should raise_error(ModBus::Errors::ModBusError)
-  end
-
 
   it "should have coil status" do
     @sl.coil_status.should == []
@@ -78,7 +73,7 @@ describe ModBus::TCPSlave do
     @mstr.read_holding_registers(0, 3) == [1, 2, 55]
   end
 
-  it "should have holding registers" do
+  it "should have input registers" do
     @sl.input_registers.should == []
     @sl.input_registers = [0, 0, 0]
     @sl.input_registers.should == [0, 0, 0]
@@ -86,9 +81,9 @@ describe ModBus::TCPSlave do
     @mstr.read_input_registers(0, 3).should == [0, 0, 0]
 
     @sl.input_registers[2] = 55
-    @sl.input_registers.should = [0, 0, 55]
+    @sl.input_registers.should == [0, 0, 55]
 
-    @mstr.read_holding_registers(0, 3) == [1, 2, 55]
+    @mstr.read_input_registers(0, 3) == [1, 2, 55]
   end
 
   after(:each) do

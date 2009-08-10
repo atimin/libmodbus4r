@@ -35,7 +35,7 @@ void Init__modbus4r()
     rb_define_method(cMaster, "read_holding_registers", 
                     mb_mstr_read_holding_registers, 2);
     rb_define_method(cMaster, "read_input_registers", 
-                    mb_mstr_read_holding_registers, 2);
+                    mb_mstr_read_input_registers, 2);
     rb_define_method(cMaster, "force_single_coil", 
                     mb_mstr_force_single_coil, 2);
     rb_define_method(cMaster, "preset_single_register", 
@@ -71,6 +71,10 @@ void Init__modbus4r()
                                 mb_tcp_sl_get_holding_registers, 0);
     rb_define_method(cTCPSlave, "holding_registers=", 
                                 mb_tcp_sl_set_holding_registers, 1);
+    rb_define_method(cTCPSlave, "input_registers", 
+                                mb_tcp_sl_get_input_registers, 0);
+    rb_define_method(cTCPSlave, "input_registers=", 
+                                mb_tcp_sl_set_input_registers, 1);
     /* Errors */
     mErrors = rb_define_module_under(mModBus, "Errors");
     eModBusError = rb_define_class_under(mErrors, "ModBusError", 

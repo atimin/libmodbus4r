@@ -23,6 +23,7 @@ typedef struct {
     modbus_mapping_t *mb_map;
     VALUE coil_status;
     VALUE input_status;
+    VALUE holding_registers;
 } modbus_slave_t;
 
 void mb_tcp_sl_free(modbus_slave_t *mb_slave)
@@ -79,6 +80,36 @@ void mb_push_input_status(modbus_slave_t *mb_slave)
     }
 }
 
+void mb_push_holding_registers(modbus_slave_t *mb_slave)
+{
+    int len = RARRAY_LEN(mb_slave->holding_registers);
+    VALUE *regs = RARRAY_PTR(mb_slave->holding_registers);
+    mb_slave->mb_map->nb_holding_registers = len; 
+    mb_slave->mb_map->tab_holding_registers = malloc(sizeof(uint16_t) * len);
+    uint16_t *ptr = mb_slave->mb_map->tab_holding_registers;
+
+    int i;
+    for (i = 0; i < len; i++) {
+        *regs = rb_funcall(*regs, rb_intern("to_i"), 0);
+        *ptr = FIX2INT(*regs);
+        ptr++;
+        regs++;
+    }
+}
+
+void mb_pull_holding_registers(modbus_slave_t *mb_slave)
+{
+    uint16_t *ptr_map = mb_slave->mb_map->tab_holding_registers;
+    VALUE *ptr_reg = RARRAY_PTR(mb_slave->holding_registers);
+    int i;
+    for(i = 0; i < mb_slave->mb_map->nb_holding_registers; i++) {
+       *ptr_reg = INT2FIX(*ptr_map);
+       ptr_reg++;
+       ptr_map++;
+    }
+}
+
+
 void *mb_serv(void *arg)
 {
     modbus_slave_t *mb_slave = (modbus_slave_t *)arg;
@@ -98,9 +129,13 @@ void *mb_serv(void *arg)
             if (ret == 0) {
                 mb_push_coil_status(mb_slave);
                 mb_push_input_status(mb_slave);
+                mb_push_holding_registers(mb_slave);
+
                 modbus_slave_manage(mb_slave->mb_param, query, 
                                     query_size, mb_slave->mb_map);
+
                 mb_pull_coil_status(mb_slave);
+                mb_pull_holding_registers(mb_slave);
             } else if (ret == CONNECTION_CLOSED) {
                 break;
             } else {
@@ -130,6 +165,7 @@ VALUE mb_tcp_sl_new(VALUE self, VALUE ip_address, VALUE port, VALUE slave)
     
     mb_slave->coil_status = rb_ary_new();
     mb_slave->input_status = rb_ary_new();
+    mb_slave->holding_registers = rb_ary_new();
 
     return Data_Wrap_Struct(self, 0, mb_tcp_sl_free, mb_slave);
 }
@@ -212,4 +248,24 @@ VALUE mb_tcp_sl_set_input_status(VALUE self, VALUE value)
     mb_slave->input_status = rb_funcall(value, rb_intern("dup"), 0);
         
     return mb_slave->input_status;
+}
+
+VALUE mb_tcp_sl_get_holding_registers(VALUE self)
+{
+    modbus_slave_t *mb_slave;
+    Data_Get_Struct(self, modbus_slave_t, mb_slave);
+
+    return mb_slave->holding_registers;
+}
+
+VALUE mb_tcp_sl_set_holding_registers(VALUE self, VALUE value)
+{
+    modbus_slave_t *mb_slave;
+    Data_Get_Struct(self, modbus_slave_t, mb_slave);
+
+    value = rb_funcall(value, rb_intern("to_a"), 0);
+    mb_slave->holding_registers = rb_funcall(value, rb_intern("dup"), 0);
+        
+    return mb_slave->holding_registers;
+
 }

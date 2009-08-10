@@ -58,26 +58,27 @@ describe ModBus::TCPSlave do
     @mstr.read_input_status(0, 3).should  == [false, true, false]
   end
 
-  it "should have input status" do
+  it "should have holding registers" do
     @sl.holding_registers.should == []
     @sl.holding_registers = [0, 0, 0]
 
     @mstr.read_holding_registers(0, 3).should == [0, 0, 0]
-    @mstr.preset_single_register(1, 0x0AA0)
+    @mstr.preset_single_register(1, 10000)
     
-    @sl.holding_registers.should == [0, 0x0AA0, 0]
+    @sl.holding_registers.should == [0, 10000, 0]
 
     @mstr.preset_multiple_registers(0, [1, 2, 3])
 
     @sl.holding_registers.should == [1, 2, 3]
-    @sl.holding_registers[2] = 0xABCD
+    @sl.holding_registers[2] = 55
 
-    @mstr.read_holding_registers(0, 3) == [1, 2, 0xABCD]
+    @mstr.read_holding_registers(0, 3) == [1, 2, 55]
 
   end
 
   after(:each) do
     @sl.stop unless @sl.stoped?
+    @mstr.close unless @mstr.closed?
   end
 
 end

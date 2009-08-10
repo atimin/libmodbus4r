@@ -30,6 +30,7 @@ describe ModBus::TCPSlave do
   it "should have coil status" do
     @sl.coil_status.should == []
     @sl.coil_status = [false, true, false]
+    @sl.coil_status.should == [false, true, false]
     
     @mstr.read_coil_status(0, 3).should == [false, true, false]
     @mstr.force_single_coil(2, true)
@@ -39,9 +40,9 @@ describe ModBus::TCPSlave do
     @mstr.force_multiple_coils(0, [true, true, true])
 
     @sl.coil_status.should == [true, true, true]
-
     @sl.coil_status[1] = false
     @sl.coil_status.should == [true, false, true]
+
     @mstr.read_coil_status(0, 3).should == [true, false, true]
   end
 
@@ -61,6 +62,7 @@ describe ModBus::TCPSlave do
   it "should have holding registers" do
     @sl.holding_registers.should == []
     @sl.holding_registers = [0, 0, 0]
+    @sl.holding_registers.should == [0, 0, 0]
 
     @mstr.read_holding_registers(0, 3).should == [0, 0, 0]
     @mstr.preset_single_register(1, 10000)
@@ -71,9 +73,22 @@ describe ModBus::TCPSlave do
 
     @sl.holding_registers.should == [1, 2, 3]
     @sl.holding_registers[2] = 55
+    @sl.holding_registers.should == [1, 2, 55]
 
     @mstr.read_holding_registers(0, 3) == [1, 2, 55]
+  end
 
+  it "should have holding registers" do
+    @sl.input_registers.should == []
+    @sl.input_registers = [0, 0, 0]
+    @sl.input_registers.should == [0, 0, 0]
+
+    @mstr.read_input_registers(0, 3).should == [0, 0, 0]
+
+    @sl.input_registers[2] = 55
+    @sl.input_registers.should = [0, 0, 55]
+
+    @mstr.read_holding_registers(0, 3) == [1, 2, 55]
   end
 
   after(:each) do

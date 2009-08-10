@@ -61,6 +61,7 @@ void mb_pull_coil_status(modbus_slave_t *mb_slave)
     for(i = 0; i < mb_slave->mb_map->nb_coil_status; i++) {
        *ptr_coil = (*ptr_map == 0 ? Qfalse : Qtrue);
        ptr_coil++;
+       ptr_map++;
     }
 }
 

@@ -32,9 +32,9 @@ describe ModBus::TCPSlave do
     @sl.coil_status = [false, true, false]
     
     @mstr.read_coil_status(0, 3).should == [false, true, false]
-    @mstr.force_single_coil(1, false)
+    @mstr.force_single_coil(2, true)
      
-    @sl.coil_status.should == [false, false ,false]
+    @sl.coil_status.should == [false, true ,true]
      
     @mstr.force_multiple_coils(0, [true, true, true])
 

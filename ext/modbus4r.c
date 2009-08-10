@@ -19,7 +19,7 @@ GNU General Public License for more details. */
 
 VALUE mModBus, cMaster, cTCPMaster, cRTUMaster;
 
-void Init_modbus4r()
+void Init__modbus4r()
 {
     mModBus = rb_define_module("ModBus");
     /* Master */

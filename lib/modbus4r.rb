@@ -11,4 +11,4 @@
 #MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #GNU General Public License for more details. */
 
-require 'modbus4r/_modbus4r'
+require '_modbus4r'

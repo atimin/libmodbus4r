@@ -1,0 +1,5 @@
+Next release 0.3.0
+======================
+- Migrate on libmodbus-2.2.0
+- Add TCP\RTU slave
+

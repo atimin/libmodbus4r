@@ -1,0 +1,6 @@
+libmodbus 0.2.1 (2009-08-10)
+- Fix bug in Master::read_input_coils
+
+libmodbus 0.2.0 (2009-07-30)
+===========================
+- First public release

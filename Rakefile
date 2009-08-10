@@ -44,6 +44,15 @@ task :make do
   cd 'ext' do
     ruby 'extconf.rb'
     sh 'make'
-    cp 'modbus4r.so', '../lib/'
+    cp '_modbus4r.so', '../lib/'
   end
+end
+
+task :build_gem do
+  cd 'ext' do
+    sh 'make clean'
+    rm 'Makefile'
+  end
+  rm 'lib/_modbus4r.so'
+  sh 'gem build libmodbus4r.gemspec'
 end

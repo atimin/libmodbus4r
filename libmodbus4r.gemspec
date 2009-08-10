@@ -1,7 +1,7 @@
 require 'rubygems'
 spec = Gem::Specification.new do |s|
   s.name = "libmodbus4r"
-  s.version = "0.2.0"
+  s.version = "0.2.1"
   s.author  = 'Aleksey Timin'
   s.platform = Gem::Platform::RUBY
   s.summary = "Binding use *libmodbus* (free implementation of modbus for Linux\\MacOS) for Ruby."
@@ -9,6 +9,6 @@ spec = Gem::Specification.new do |s|
   s.autorequire = "libmodbus4r"
   s.has_rdoc = true
   s.rdoc_options = ["--title", "libmodbus4r", "--inline-source", "--main", "README"]
-  s.extra_rdoc_files = ["README", "LICENSE", "ChangeLog"]
+  s.extra_rdoc_files = ["README", "LICENSE", "NEWS", "TODO"]
   s.extensions = ['ext/extconf.rb'] 
 end

@@ -2,7 +2,7 @@
 
 Binding use *libmodbus* (free implementation of modbus for Linux\MacOS) for Ruby.
 
-== Futures
+== Features
 
 * Use only Ruby-1.9.x
 * Use C library *libmodbus*;
@@ -32,7 +32,7 @@ Aleksey Timin <atimin@gmail.com>
 
 == Refernces 
 
-Home page projects : http://flipback.github.com/libmodbus4r
+Home page projects : http://flipback.github.com/libmodbus4r/
 Hosting on RubyForge : http://rubyforge.org/projects/libmodbus4r
 Hosting on GitHub : http://github.com/flipback/libmodbus4r/tree/master
 

@@ -84,7 +84,7 @@ VALUE mb_mstr_read_input_status(VALUE self, VALUE slave,
                                     VALUE start_addr, VALUE nb)
 {
     return mb_mstr_read_coil(self, slave, start_addr, nb, 
-                            read_coil_status);
+                            read_input_status);
 }
 
 VALUE mb_mstr_read_registers(VALUE self, VALUE slave,

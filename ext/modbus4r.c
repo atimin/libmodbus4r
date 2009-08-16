@@ -34,7 +34,7 @@ void Init__modbus4r()
     rb_define_method(cMaster, "read_holding_registers", 
                     mb_mstr_read_holding_registers, 3);
     rb_define_method(cMaster, "read_input_registers", 
-                    mb_mstr_read_holding_registers, 3);
+                    mb_mstr_read_input_registers, 3);
     rb_define_method(cMaster, "force_single_coil", 
                     mb_mstr_force_single_coil, 3);
     rb_define_method(cMaster, "preset_single_register", 

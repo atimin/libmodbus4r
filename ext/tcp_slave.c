@@ -92,7 +92,6 @@ void mb_push_holding_registers(modbus_slave_t *mb_slave)
 
     int i;
     for (i = 0; i < len; i++) {
-        *regs = rb_funcall(*regs, rb_intern("to_i"), 0);
         *ptr = FIX2INT(*regs);
         ptr++;
         regs++;
@@ -121,7 +120,6 @@ void mb_push_input_registers(modbus_slave_t *mb_slave)
 
     int i;
     for (i = 0; i < len; i++) {
-        *regs = rb_funcall(*regs, rb_intern("to_i"), 0);
         *ptr = FIX2INT(*regs);
         ptr++;
         regs++;
@@ -187,8 +185,6 @@ VALUE mb_tcp_sl_new(VALUE self, VALUE ip_address, VALUE port, VALUE slave)
     mb_slave->holding_registers = rb_ary_new();
     mb_slave->input_registers = rb_ary_new();
 
-    modbus_set_debug(mb_slave, 1);
-
     return Data_Wrap_Struct(self, 0, mb_tcp_sl_free, mb_slave);
 }
 
@@ -248,7 +244,7 @@ VALUE mb_tcp_sl_set_coil_status(VALUE self, VALUE value)
     Data_Get_Struct(self, modbus_slave_t, mb_slave);
 
     value = rb_funcall(value, rb_intern("to_a"), 0);
-    mb_slave->coil_status = rb_funcall(value, rb_intern("dup"), 0);
+    mb_slave->coil_status = rb_ary_dup(value);
     
     return mb_slave->coil_status;
 }
@@ -267,7 +263,7 @@ VALUE mb_tcp_sl_set_input_status(VALUE self, VALUE value)
     Data_Get_Struct(self, modbus_slave_t, mb_slave);
 
     value = rb_funcall(value, rb_intern("to_a"), 0);
-    mb_slave->input_status = rb_funcall(value, rb_intern("dup"), 0);
+    mb_slave->input_status = rb_ary_dup(value);
         
     return mb_slave->input_status;
 }
@@ -286,7 +282,13 @@ VALUE mb_tcp_sl_set_holding_registers(VALUE self, VALUE value)
     Data_Get_Struct(self, modbus_slave_t, mb_slave);
 
     value = rb_funcall(value, rb_intern("to_a"), 0);
-    mb_slave->holding_registers = rb_funcall(value, rb_intern("dup"), 0);
+    mb_slave->holding_registers = rb_ary_dup(value);
+    VALUE *reg = RARRAY_PTR(mb_slave->holding_registers);
+    
+    int i;
+    for (i = 0; i < RARRAY_LEN(mb_slave->holding_registers); i++) {
+         *reg = rb_funcall(*reg, rb_intern("to_i"), 0);
+    }
         
     return mb_slave->holding_registers;
 }
@@ -305,7 +307,13 @@ VALUE mb_tcp_sl_set_input_registers(VALUE self, VALUE value)
     Data_Get_Struct(self, modbus_slave_t, mb_slave);
 
     value = rb_funcall(value, rb_intern("to_a"), 0);
-    mb_slave->input_registers = rb_funcall(value, rb_intern("dup"), 0);
+    mb_slave->input_registers = rb_ary_dup(value);
+    VALUE *reg = RARRAY_PTR(mb_slave->input_registers);
+    
+    int i;
+    for (i = 0; i < RARRAY_LEN(mb_slave->input_registers); i++) {
+         *reg = rb_funcall(*reg, rb_intern("to_i"), 0);
+    }
         
     return mb_slave->input_registers;
 }

@@ -3,6 +3,15 @@ require 'modbus4r'
 describe ModBus::TCPMaster do
 
   before(:all) do
+    @sl = ModBus::TCPSlave.new('127.0.0.1', 1502, 1)
+    @sl.coil_status = [false, false, false, false, 
+                        false, false, false, false]
+    @sl.input_status = [false, false, false, false,
+                        false, false, false, false]
+    @sl.holding_registers = [0, 0, 0, 0, 0, 0, 0, 0, 0]
+    @sl.input_registers = [0, 0, 0, 0, 0, 0, 0, 0, 0]
+    @sl.start
+
     @mstr = ModBus::TCPMaster.new('127.0.0.1', 1502, 1)
     @mstr.connect
   end
@@ -28,7 +37,7 @@ describe ModBus::TCPMaster do
 
 
   it "should raise exception if too many data" do
-   lambda { @mstr.read_coil_status(0, 0x07D1) }.should raise_error(ModBus::Errors::ModBusError, "Too many data (-15)")
+   lambda { @mstr.read_coil_status(0, 0x07D1) }.should raise_error(ModBus::Errors::ModBusError, "Invalid data (-16)")
   end
 
   # Read input status
@@ -42,7 +51,7 @@ describe ModBus::TCPMaster do
 
 
   it "should raise exception if too many data" do
-   lambda { @mstr.read_input_status(0, 0x07D1) }.should raise_error(ModBus::Errors::ModBusError, "Too many data (-15)")
+   lambda { @mstr.read_input_status(0, 0x07D1) }.should raise_error(ModBus::Errors::ModBusError, "Invalid data (-16)")
   end
 
   # Read holding registers
@@ -56,7 +65,7 @@ describe ModBus::TCPMaster do
 
 
   it "should raise exception if too many data" do
-   lambda { @mstr.read_holding_registers(0, 0x007E) }.should raise_error(ModBus::Errors::ModBusError, "Too many data (-15)")
+   lambda { @mstr.read_holding_registers(0, 0x007E) }.should raise_error(ModBus::Errors::ModBusError, "Invalid data (-16)")
   end
 
   # Read input registers
@@ -69,7 +78,7 @@ describe ModBus::TCPMaster do
   end
 
   it "should raise exception if too many data" do
-   lambda { @mstr.read_input_registers(0, 0x007E) }.should raise_error(ModBus::Errors::ModBusError, "Too many data (-15)")
+   lambda { @mstr.read_input_registers(0, 0x007E) }.should raise_error(ModBus::Errors::ModBusError, "Invalid data (-16)")
   end
 
   # Force single coil
@@ -94,8 +103,8 @@ describe ModBus::TCPMaster do
 
   # Force multiple coils
   it "should force multiple coils" do
-    @mstr.force_multiple_coils(14, [false, true, false, true]).should == @mstr
-    @mstr.read_coil_status(13, 5).should == [false, false, true, false, true] 
+    @mstr.force_multiple_coils(4, [false, true, false, true]).should == @mstr
+    @mstr.read_coil_status(3, 5).should == [false, false, true, false, true] 
   end
 
   it "should raise exception if illegal data address" do
@@ -104,8 +113,8 @@ describe ModBus::TCPMaster do
 
   # Preset multiple registers
   it "should preset multiple registers" do
-    @mstr.preset_multiple_registers(14, [1, 2, 3, 0xAACC]).should == @mstr
-    @mstr.read_holding_registers(13, 5).should == [0, 1, 2, 3, 0xAACC] 
+    @mstr.preset_multiple_registers(4, [1, 2, 3, 0xAACC]).should == @mstr
+    @mstr.read_holding_registers(3, 5).should == [0, 1, 2, 3, 0xAACC] 
   end
 
   it "should raise exception if illegal data address" do
@@ -114,6 +123,7 @@ describe ModBus::TCPMaster do
 
   after(:all) do
     @mstr.close unless @mstr.closed?
+    @sl.stop unless @sl.stoped?
   end
 
 end

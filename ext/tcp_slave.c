@@ -57,7 +57,7 @@ void *mb_session_serv(void *arg)
         } else if (ret == CONNECTION_CLOSED) {
             pthread_exit(NULL);
         } else {
-             mb_raise_error(ret);
+            continue;
         }
     }
 }

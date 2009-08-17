@@ -56,7 +56,7 @@ void *mb_rtu_serv(void *arg)
         } else if (ret == CONNECTION_CLOSED) {
             break;
         } else {
-             mb_raise_error(ret);
+            continue;
         }
     }
 }

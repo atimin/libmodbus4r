@@ -106,7 +106,7 @@ void mb_push_input_registers(modbus_slave_t *mb_slave)
     }
 }
 
-VALUE mb_tcp_sl_is_stoped(VALUE self)
+VALUE mb_sl_is_stoped(VALUE self)
 {
     modbus_slave_t *mb_slave;
     Data_Get_Struct(self, modbus_slave_t, mb_slave);
@@ -118,7 +118,7 @@ VALUE mb_tcp_sl_is_stoped(VALUE self)
     return Qfalse;
 }
 
-VALUE mb_tcp_sl_get_coil_status(VALUE self)
+VALUE mb_sl_get_coil_status(VALUE self)
 {
     modbus_slave_t *mb_slave;
     Data_Get_Struct(self, modbus_slave_t, mb_slave);
@@ -127,7 +127,7 @@ VALUE mb_tcp_sl_get_coil_status(VALUE self)
 }
 
 
-VALUE mb_tcp_sl_set_coil_status(VALUE self, VALUE value)
+VALUE mb_sl_set_coil_status(VALUE self, VALUE value)
 {
     modbus_slave_t *mb_slave;
     Data_Get_Struct(self, modbus_slave_t, mb_slave);
@@ -138,7 +138,7 @@ VALUE mb_tcp_sl_set_coil_status(VALUE self, VALUE value)
     return mb_slave->coil_status;
 }
 
-VALUE mb_tcp_sl_get_input_status(VALUE self)
+VALUE mb_sl_get_input_status(VALUE self)
 {
     modbus_slave_t *mb_slave;
     Data_Get_Struct(self, modbus_slave_t, mb_slave);
@@ -146,7 +146,7 @@ VALUE mb_tcp_sl_get_input_status(VALUE self)
     return mb_slave->input_status;
 }
 
-VALUE mb_tcp_sl_set_input_status(VALUE self, VALUE value)
+VALUE mb_sl_set_input_status(VALUE self, VALUE value)
 {
     modbus_slave_t *mb_slave;
     Data_Get_Struct(self, modbus_slave_t, mb_slave);
@@ -157,7 +157,7 @@ VALUE mb_tcp_sl_set_input_status(VALUE self, VALUE value)
     return mb_slave->input_status;
 }
 
-VALUE mb_tcp_sl_get_holding_registers(VALUE self)
+VALUE mb_sl_get_holding_registers(VALUE self)
 {
     modbus_slave_t *mb_slave;
     Data_Get_Struct(self, modbus_slave_t, mb_slave);
@@ -165,7 +165,7 @@ VALUE mb_tcp_sl_get_holding_registers(VALUE self)
     return mb_slave->holding_registers;
 }
 
-VALUE mb_tcp_sl_set_holding_registers(VALUE self, VALUE value)
+VALUE mb_sl_set_holding_registers(VALUE self, VALUE value)
 {
     modbus_slave_t *mb_slave;
     Data_Get_Struct(self, modbus_slave_t, mb_slave);
@@ -182,7 +182,7 @@ VALUE mb_tcp_sl_set_holding_registers(VALUE self, VALUE value)
     return mb_slave->holding_registers;
 }
 
-VALUE mb_tcp_sl_get_input_registers(VALUE self)
+VALUE mb_sl_get_input_registers(VALUE self)
 {
     modbus_slave_t *mb_slave;
     Data_Get_Struct(self, modbus_slave_t, mb_slave);
@@ -190,7 +190,7 @@ VALUE mb_tcp_sl_get_input_registers(VALUE self)
     return mb_slave->input_registers;
 }
 
-VALUE mb_tcp_sl_set_input_registers(VALUE self, VALUE value)
+VALUE mb_sl_set_input_registers(VALUE self, VALUE value)
 {
     modbus_slave_t *mb_slave;
     Data_Get_Struct(self, modbus_slave_t, mb_slave);

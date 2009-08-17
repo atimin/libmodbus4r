@@ -56,23 +56,23 @@ void Init__modbus4r()
 
     /* Slave */
     cSlave = rb_define_class_under(mModBus, "Slave", rb_cObject);
-    rb_define_method(cSlave, "stoped?", mb_tcp_sl_is_stoped, 0);
+    rb_define_method(cSlave, "stoped?", mb_sl_is_stoped, 0);
     rb_define_method(cSlave, "coil_status", 
-                                mb_tcp_sl_get_coil_status, 0);
+                                mb_sl_get_coil_status, 0);
     rb_define_method(cSlave, "coil_status=", 
-                                mb_tcp_sl_set_coil_status, 1);
+                                mb_sl_set_coil_status, 1);
     rb_define_method(cSlave, "input_status", 
-                                mb_tcp_sl_get_input_status, 0);
+                                mb_sl_get_input_status, 0);
     rb_define_method(cSlave, "input_status=", 
-                                mb_tcp_sl_set_input_status, 1);
+                                mb_sl_set_input_status, 1);
     rb_define_method(cSlave, "holding_registers", 
-                                mb_tcp_sl_get_holding_registers, 0);
+                                mb_sl_get_holding_registers, 0);
     rb_define_method(cSlave, "holding_registers=", 
-                                mb_tcp_sl_set_holding_registers, 1);
+                                mb_sl_set_holding_registers, 1);
     rb_define_method(cSlave, "input_registers", 
-                                mb_tcp_sl_get_input_registers, 0);
+                                mb_sl_get_input_registers, 0);
     rb_define_method(cSlave, "input_registers=", 
-                                mb_tcp_sl_set_input_registers, 1);
+                                mb_sl_set_input_registers, 1);
 
     /* TCPSlave */
     cTCPSlave = rb_define_class_under(mModBus, "TCPSlave", cSlave);

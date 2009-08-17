@@ -31,14 +31,14 @@ extern void mb_push_input_status(modbus_slave_t *mb_slave);
 extern void mb_push_holding_registers(modbus_slave_t *mb_slave);
 extern void mb_pull_holding_registers(modbus_slave_t *mb_slave);
 extern void mb_push_input_registers(modbus_slave_t *mb_slave);
-extern VALUE mb_tcp_sl_is_stoped(VALUE self);
-extern VALUE mb_tcp_sl_get_coil_status(VALUE self);
-extern VALUE mb_tcp_sl_set_coil_status(VALUE self, VALUE value);
-extern VALUE mb_tcp_sl_get_input_status(VALUE self);
-extern VALUE mb_tcp_sl_set_input_status(VALUE self, VALUE value);
-extern VALUE mb_tcp_sl_get_holding_registers(VALUE self);
-extern VALUE mb_tcp_sl_set_holding_registers(VALUE self, VALUE value);
-extern VALUE mb_tcp_sl_get_input_registers(VALUE self);
-extern VALUE mb_tcp_sl_set_input_registers(VALUE self, VALUE value);
+extern VALUE mb_sl_is_stoped(VALUE self);
+extern VALUE mb_sl_get_coil_status(VALUE self);
+extern VALUE mb_sl_set_coil_status(VALUE self, VALUE value);
+extern VALUE mb_sl_get_input_status(VALUE self);
+extern VALUE mb_sl_set_input_status(VALUE self, VALUE value);
+extern VALUE mb_sl_get_holding_registers(VALUE self);
+extern VALUE mb_sl_set_holding_registers(VALUE self, VALUE value);
+extern VALUE mb_sl_get_input_registers(VALUE self);
+extern VALUE mb_sl_set_input_registers(VALUE self, VALUE value);
 
 #endif

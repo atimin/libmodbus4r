@@ -17,5 +17,7 @@ GNU General Public License for more details. */
 extern VALUE mb_tcp_sl_new(VALUE self, VALUE ip_address, VALUE port, VALUE id);
 extern VALUE mb_tcp_sl_start(VALUE self);
 extern VALUE mb_tcp_sl_stop(VALUE self);
+extern VALUE mb_tcp_sl_get_maxconn_stop(VALUE self);
+extern VALUE mb_tcp_sl_set_maxconn_stop(VALUE self, VALUE value);
 
 #endif

@@ -11,6 +11,7 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details. */
 
+#include <pthread.h> 
 #include <unistd.h>
 #include "modbus4r.h"
 #include "slave.h"
@@ -27,40 +28,47 @@ void mb_tcp_sl_free(modbus_slave_t *mb_slave)
     free(mb_slave);
 }
 
+void *mb_session_serv(void *arg)
+{
+    modbus_slave_t *mb_slave = (modbus_slave_t *)arg;
+    
+    uint8_t query[MAX_MESSAGE_LENGTH];
+    int query_size;
+    while(1) {
+        int ret = modbus_slave_receive(mb_slave->mb_param, -1,
+                                        query, &query_size);
+
+        if (ret == 0) {
+            mb_push_coil_status(mb_slave);
+            mb_push_input_status(mb_slave);
+            mb_push_holding_registers(mb_slave);
+            mb_push_input_registers(mb_slave);
+
+            modbus_slave_manage(mb_slave->mb_param, query, 
+                                    query_size, mb_slave->mb_map);
+
+            mb_pull_coil_status(mb_slave);
+            mb_pull_holding_registers(mb_slave);
+        } else if (ret == CONNECTION_CLOSED) {
+            pthread_exit(NULL);
+        } else {
+             mb_raise_error(ret);
+        }
+    }
+
+}
 
 void *mb_serv(void *arg)
 {
     modbus_slave_t *mb_slave = (modbus_slave_t *)arg;
 
-    mb_slave->listen_sock = modbus_slave_listen_tcp(mb_slave->mb_param, 1);
+    mb_slave->listen_sock = modbus_slave_listen_tcp(mb_slave->mb_param, mb_slave->max_conn);
 
     while (1) {
         modbus_slave_accept_tcp(mb_slave->mb_param, 
                                 &mb_slave->listen_sock);
-
-        uint8_t query[MAX_MESSAGE_LENGTH];
-        int query_size;
-        while(1) {
-            int ret = modbus_slave_receive(mb_slave->mb_param, -1,
-                                        query, &query_size);
-
-            if (ret == 0) {
-                mb_push_coil_status(mb_slave);
-                mb_push_input_status(mb_slave);
-                mb_push_holding_registers(mb_slave);
-                mb_push_input_registers(mb_slave);
-
-                modbus_slave_manage(mb_slave->mb_param, query, 
-                                    query_size, mb_slave->mb_map);
-
-                mb_pull_coil_status(mb_slave);
-                mb_pull_holding_registers(mb_slave);
-            } else if (ret == CONNECTION_CLOSED) {
-                break;
-            } else {
-                mb_raise_error(ret);
-            }
-        }
+        pthread_t tid;
+        pthread_create(&tid, NULL, mb_session_serv, (void *)mb_slave); 
     }
 }
 
@@ -86,7 +94,7 @@ VALUE mb_tcp_sl_new(VALUE self, VALUE ip_address, VALUE port, VALUE slave)
     mb_slave->input_status = rb_ary_new();
     mb_slave->holding_registers = rb_ary_new();
     mb_slave->input_registers = rb_ary_new();
-
+    mb_slave->max_conn = 4;
     return Data_Wrap_Struct(self, 0, mb_tcp_sl_free, mb_slave);
 }
 
@@ -117,4 +125,23 @@ VALUE mb_tcp_sl_stop(VALUE self)
     close(mb_slave->listen_sock);
 
     return self;
+}
+
+VALUE mb_tcp_sl_get_maxconn_stop(VALUE self)
+{
+    modbus_slave_t *mb_slave;
+    Data_Get_Struct(self, modbus_slave_t, mb_slave);
+
+    return INT2FIX(mb_slave->max_conn);
+}
+
+VALUE mb_tcp_sl_set_maxconn_stop(VALUE self, VALUE value)
+{
+    modbus_slave_t *mb_slave;
+    Data_Get_Struct(self, modbus_slave_t, mb_slave);
+
+    value = rb_funcall(value, rb_intern("to_i"), 0);
+    mb_slave->max_conn = FIX2INT(value);
+
+    return INT2FIX(mb_slave->max_conn);
 }

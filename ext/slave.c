@@ -11,7 +11,6 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details. */
 
-#include <pthread.h> 
 #include <unistd.h>
 #include "modbus4r.h"
 #include "slave.h"

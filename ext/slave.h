@@ -17,6 +17,7 @@ GNU General Public License for more details. */
 typedef struct {
     pthread_t tid;
     int listen_sock;
+    int max_conn;
     modbus_param_t *mb_param;
     modbus_mapping_t *mb_map;
     VALUE coil_status;

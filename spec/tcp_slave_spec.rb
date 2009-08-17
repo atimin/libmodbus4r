@@ -86,6 +86,12 @@ describe ModBus::TCPSlave do
     @mstr.read_input_registers(0, 3) == [1, 2, 55]
   end
 
+  it "should have default max connection" do
+    @sl.max_conn.should == 4 
+    @sl.max_conn = 1
+    @sl.max_conn.should == 1 
+  end
+
   after(:each) do
     @sl.stop unless @sl.stoped?
     @mstr.close unless @mstr.closed?

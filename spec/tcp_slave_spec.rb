@@ -5,6 +5,7 @@ describe ModBus::TCPSlave do
   before(:each) do
     @sl = ModBus::TCPSlave.new('127.0.0.1', 1502, 1)
     @sl.start
+
     @mstr = ModBus::TCPMaster.new('127.0.0.1', 1502, 1)
     @mstr.connect
   end

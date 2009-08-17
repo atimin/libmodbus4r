@@ -12,10 +12,9 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details. */
 
 #include <unistd.h>
+#include <pthread.h>
 #include "modbus4r.h"
 #include "slave.h"
-
-
 
 void mb_push_coil_status(modbus_slave_t *mb_slave)
 {
@@ -125,7 +124,6 @@ VALUE mb_sl_get_coil_status(VALUE self)
     return mb_slave->coil_status;
 }
 
-
 VALUE mb_sl_set_coil_status(VALUE self, VALUE value)
 {
     modbus_slave_t *mb_slave;
@@ -204,4 +202,14 @@ VALUE mb_sl_set_input_registers(VALUE self, VALUE value)
     }
         
     return mb_slave->input_registers;
+}
+
+VALUE mb_sl_join(VALUE self)
+{
+    modbus_slave_t *mb_slave;
+    Data_Get_Struct(self, modbus_slave_t, mb_slave);
+
+    pthread_join(mb_slave->tid, NULL);
+
+    return self;
 }

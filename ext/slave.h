@@ -41,5 +41,5 @@ extern VALUE mb_sl_get_holding_registers(VALUE self);
 extern VALUE mb_sl_set_holding_registers(VALUE self, VALUE value);
 extern VALUE mb_sl_get_input_registers(VALUE self);
 extern VALUE mb_sl_set_input_registers(VALUE self, VALUE value);
-
+extern VALUE mb_sl_join(VALUE self);
 #endif

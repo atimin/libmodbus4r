@@ -75,7 +75,7 @@ void Init__modbus4r()
                                 mb_sl_get_input_registers, 0);
     rb_define_method(cSlave, "input_registers=", 
                                 mb_sl_set_input_registers, 1);
-
+    rb_define_method(cSlave, "join", mb_sl_join, 0);
     /* TCPSlave */
     cTCPSlave = rb_define_class_under(mModBus, "TCPSlave", cSlave);
     rb_define_singleton_method(cTCPSlave, "new", mb_tcp_sl_new, 3);

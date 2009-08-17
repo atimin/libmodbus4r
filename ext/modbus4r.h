@@ -16,6 +16,6 @@ GNU General Public License for more details. */
 
 #include "ruby/ruby.h"
 #include "ruby/intern.h"
-#include "modbus/modbus.h"
+#include "modbus.h"
 
 #endif

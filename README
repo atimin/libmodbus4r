@@ -21,14 +21,6 @@ libmodbus4r –a wrapper for library libmodbus wrote in Ruby. libmodbus – a fr
 
 Importan! libmodbus4 work only in Linux и OSX
 
-1.If you not have interpritator Ruby-1.9.x download and read instruction of installation on official site http://ruby-lang.org
-2.Installation libmodbus from source
-    $ bzr branch lp:libmodbus
-    $ cd libmodbus/
-    $ ./waf --prefix=/usr
-    $ ./waf build
-    $ sudo ./waf install
-3.Installation libmodbus4r
     Simplest installation is use rubygems
     $ sudo gem install libmodbus4r
     or  installation from source with command:

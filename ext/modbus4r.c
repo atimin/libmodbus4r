@@ -18,8 +18,10 @@ GNU General Public License for more details. */
 #include "tcp_master.h"
 #include "rtu_master.h"
 #include "tcp_slave.h"
+#include "rtu_slave.h"
 
-VALUE mModBus, cMaster, cTCPMaster, cRTUMaster, cSlave, cTCPSlave;
+VALUE mModBus, cMaster, cTCPMaster, cRTUMaster, cSlave, 
+        cTCPSlave, cRTUSlave;
 
 void Init__modbus4r()
 {
@@ -81,6 +83,12 @@ void Init__modbus4r()
     rb_define_method(cTCPSlave, "stop", mb_tcp_sl_stop, 0);
     rb_define_method(cTCPSlave, "max_conn", mb_tcp_sl_get_maxconn_stop, 0);
     rb_define_method(cTCPSlave, "max_conn=", mb_tcp_sl_set_maxconn_stop, 1);
+
+     /* RTUSlave */
+    cRTUSlave = rb_define_class_under(mModBus, "RTUSlave", cSlave);
+    rb_define_singleton_method(cRTUSlave, "new", mb_rtu_sl_new, 6);
+    rb_define_method(cRTUSlave, "start", mb_rtu_sl_start, 0);
+    rb_define_method(cRTUSlave, "stop", mb_rtu_sl_stop, 0);
 
     /* Errors */
     mErrors = rb_define_module_under(mModBus, "Errors");

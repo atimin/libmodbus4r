@@ -19,6 +19,8 @@ GNU General Public License for more details. */
 
 void mb_rtu_sl_free(modbus_slave_t *mb_slave)
 {
+    pthread_cancel(mb_slave->tid);
+
     modbus_close(mb_slave->mb_param);
 
     modbus_mapping_free(mb_slave->mb_map);

@@ -20,6 +20,8 @@ GNU General Public License for more details. */
 void mb_tcp_sl_free(modbus_slave_t *mb_slave)
 {
     close(mb_slave->listen_sock);
+    pthread_cancel(mb_slave->tid);
+
     modbus_close(mb_slave->mb_param);
 
     modbus_mapping_free(mb_slave->mb_map);
@@ -58,7 +60,6 @@ void *mb_session_serv(void *arg)
              mb_raise_error(ret);
         }
     }
-
 }
 
 void *mb_tcp_serv(void *arg)

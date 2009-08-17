@@ -17,13 +17,5 @@ GNU General Public License for more details. */
 extern VALUE mb_tcp_sl_new(VALUE self, VALUE ip_address, VALUE port, VALUE id);
 extern VALUE mb_tcp_sl_start(VALUE self);
 extern VALUE mb_tcp_sl_stop(VALUE self);
-extern VALUE mb_tcp_sl_is_stoped(VALUE self);
-extern VALUE mb_tcp_sl_get_coil_status(VALUE self);
-extern VALUE mb_tcp_sl_set_coil_status(VALUE self, VALUE value);
-extern VALUE mb_tcp_sl_get_input_status(VALUE self);
-extern VALUE mb_tcp_sl_set_input_status(VALUE self, VALUE value);
-extern VALUE mb_tcp_sl_get_holding_registers(VALUE self);
-extern VALUE mb_tcp_sl_set_holding_registers(VALUE self, VALUE value);
-extern VALUE mb_tcp_sl_get_input_registers(VALUE self);
-extern VALUE mb_tcp_sl_set_input_registers(VALUE self, VALUE value);
+
 #endif

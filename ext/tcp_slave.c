@@ -11,21 +11,10 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details. */
 
-#include <pthread.h> 
 #include <unistd.h>
 #include "modbus4r.h"
+#include "slave.h"
 #include "errors.h"
-
-typedef struct {
-    pthread_t tid;
-    int listen_sock;
-    modbus_param_t *mb_param;
-    modbus_mapping_t *mb_map;
-    VALUE coil_status;
-    VALUE input_status;
-    VALUE holding_registers;
-    VALUE input_registers;
-} modbus_slave_t;
 
 void mb_tcp_sl_free(modbus_slave_t *mb_slave)
 {
@@ -38,93 +27,6 @@ void mb_tcp_sl_free(modbus_slave_t *mb_slave)
     free(mb_slave);
 }
 
-void mb_push_coil_status(modbus_slave_t *mb_slave)
-{
-    int len = RARRAY_LEN(mb_slave->coil_status);
-    VALUE *coils = RARRAY_PTR(mb_slave->coil_status);
-    mb_slave->mb_map->nb_coil_status = len; 
-    mb_slave->mb_map->tab_coil_status = malloc(sizeof(uint8_t) * len);
-    uint8_t *ptr = mb_slave->mb_map->tab_coil_status;
-
-    int i;
-    for (i = 0; i < len; i++) {
-        *ptr = (*coils == Qtrue ? 1 : 0);
-        ptr++;
-        coils++;
-    }
-}
-
-void mb_pull_coil_status(modbus_slave_t *mb_slave)
-{
-    uint8_t *ptr_map = mb_slave->mb_map->tab_coil_status;
-    VALUE *ptr_coil = RARRAY_PTR(mb_slave->coil_status);
-    int i;
-    for(i = 0; i < mb_slave->mb_map->nb_coil_status; i++) {
-       *ptr_coil = (*ptr_map == 0 ? Qfalse : Qtrue);
-       ptr_coil++;
-       ptr_map++;
-    }
-}
-
-void mb_push_input_status(modbus_slave_t *mb_slave)
-{
-    int len = RARRAY_LEN(mb_slave->input_status);
-    VALUE *inputs = RARRAY_PTR(mb_slave->input_status);
-    mb_slave->mb_map->nb_input_status = len; 
-    mb_slave->mb_map->tab_input_status = malloc(sizeof(uint8_t) * len);
-    uint8_t *ptr = mb_slave->mb_map->tab_input_status;
-
-    int i;
-    for (i = 0; i < len; i++) {
-        *ptr = (*inputs == Qtrue ? 1 : 0);
-        ptr++;
-        inputs++;
-    }
-}
-
-void mb_push_holding_registers(modbus_slave_t *mb_slave)
-{
-    int len = RARRAY_LEN(mb_slave->holding_registers);
-    VALUE *regs = RARRAY_PTR(mb_slave->holding_registers);
-    mb_slave->mb_map->nb_holding_registers = len; 
-    mb_slave->mb_map->tab_holding_registers = malloc(sizeof(uint16_t) * len);
-    uint16_t *ptr = mb_slave->mb_map->tab_holding_registers;
-
-    int i;
-    for (i = 0; i < len; i++) {
-        *ptr = FIX2INT(*regs);
-        ptr++;
-        regs++;
-    }
-}
-
-void mb_pull_holding_registers(modbus_slave_t *mb_slave)
-{
-    uint16_t *ptr_map = mb_slave->mb_map->tab_holding_registers;
-    VALUE *ptr_reg = RARRAY_PTR(mb_slave->holding_registers);
-    int i;
-    for(i = 0; i < mb_slave->mb_map->nb_holding_registers; i++) {
-       *ptr_reg = INT2FIX(*ptr_map);
-       ptr_reg++;
-       ptr_map++;
-    }
-}
-
-void mb_push_input_registers(modbus_slave_t *mb_slave)
-{
-    int len = RARRAY_LEN(mb_slave->input_registers);
-    VALUE *regs = RARRAY_PTR(mb_slave->input_registers);
-    mb_slave->mb_map->nb_input_registers = len; 
-    mb_slave->mb_map->tab_input_registers = malloc(sizeof(uint16_t) * len);
-    uint16_t *ptr = mb_slave->mb_map->tab_input_registers;
-
-    int i;
-    for (i = 0; i < len; i++) {
-        *ptr = FIX2INT(*regs);
-        ptr++;
-        regs++;
-    }
-}
 
 void *mb_serv(void *arg)
 {
@@ -215,105 +117,4 @@ VALUE mb_tcp_sl_stop(VALUE self)
     close(mb_slave->listen_sock);
 
     return self;
-}
-
-VALUE mb_tcp_sl_is_stoped(VALUE self)
-{
-    modbus_slave_t *mb_slave;
-    Data_Get_Struct(self, modbus_slave_t, mb_slave);
-
-    if (read(mb_slave->listen_sock, NULL, 0) 
-            || mb_slave->listen_sock == 0) { 
-        return Qtrue;
-    }
-    return Qfalse;
-}
-
-VALUE mb_tcp_sl_get_coil_status(VALUE self)
-{
-    modbus_slave_t *mb_slave;
-    Data_Get_Struct(self, modbus_slave_t, mb_slave);
-
-    return mb_slave->coil_status;
-}
-
-
-VALUE mb_tcp_sl_set_coil_status(VALUE self, VALUE value)
-{
-    modbus_slave_t *mb_slave;
-    Data_Get_Struct(self, modbus_slave_t, mb_slave);
-
-    value = rb_funcall(value, rb_intern("to_a"), 0);
-    mb_slave->coil_status = rb_ary_dup(value);
-    
-    return mb_slave->coil_status;
-}
-
-VALUE mb_tcp_sl_get_input_status(VALUE self)
-{
-    modbus_slave_t *mb_slave;
-    Data_Get_Struct(self, modbus_slave_t, mb_slave);
-
-    return mb_slave->input_status;
-}
-
-VALUE mb_tcp_sl_set_input_status(VALUE self, VALUE value)
-{
-    modbus_slave_t *mb_slave;
-    Data_Get_Struct(self, modbus_slave_t, mb_slave);
-
-    value = rb_funcall(value, rb_intern("to_a"), 0);
-    mb_slave->input_status = rb_ary_dup(value);
-        
-    return mb_slave->input_status;
-}
-
-VALUE mb_tcp_sl_get_holding_registers(VALUE self)
-{
-    modbus_slave_t *mb_slave;
-    Data_Get_Struct(self, modbus_slave_t, mb_slave);
-
-    return mb_slave->holding_registers;
-}
-
-VALUE mb_tcp_sl_set_holding_registers(VALUE self, VALUE value)
-{
-    modbus_slave_t *mb_slave;
-    Data_Get_Struct(self, modbus_slave_t, mb_slave);
-
-    value = rb_funcall(value, rb_intern("to_a"), 0);
-    mb_slave->holding_registers = rb_ary_dup(value);
-    VALUE *reg = RARRAY_PTR(mb_slave->holding_registers);
-    
-    int i;
-    for (i = 0; i < RARRAY_LEN(mb_slave->holding_registers); i++) {
-         *reg = rb_funcall(*reg, rb_intern("to_i"), 0);
-    }
-        
-    return mb_slave->holding_registers;
-}
-
-VALUE mb_tcp_sl_get_input_registers(VALUE self)
-{
-    modbus_slave_t *mb_slave;
-    Data_Get_Struct(self, modbus_slave_t, mb_slave);
-
-    return mb_slave->input_registers;
-}
-
-VALUE mb_tcp_sl_set_input_registers(VALUE self, VALUE value)
-{
-    modbus_slave_t *mb_slave;
-    Data_Get_Struct(self, modbus_slave_t, mb_slave);
-
-    value = rb_funcall(value, rb_intern("to_a"), 0);
-    mb_slave->input_registers = rb_ary_dup(value);
-    VALUE *reg = RARRAY_PTR(mb_slave->input_registers);
-    
-    int i;
-    for (i = 0; i < RARRAY_LEN(mb_slave->input_registers); i++) {
-         *reg = rb_funcall(*reg, rb_intern("to_i"), 0);
-    }
-        
-    return mb_slave->input_registers;
 }

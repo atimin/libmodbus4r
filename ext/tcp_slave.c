@@ -24,6 +24,9 @@ void mb_tcp_sl_free(modbus_slave_t *mb_slave)
 
     modbus_mapping_free(mb_slave->mb_map);
     rb_ary_free(mb_slave->coil_status); 
+    rb_ary_free(mb_slave->input_status); 
+    rb_ary_free(mb_slave->holding_registers); 
+    rb_ary_free(mb_slave->input_registers); 
 
     free(mb_slave);
 }

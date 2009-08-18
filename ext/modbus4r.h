@@ -14,8 +14,13 @@ GNU General Public License for more details. */
 #ifndef MODBUS_H
 #define MODBUS_H
 
+#include "modbus.h"
+#ifdef RUBY_1_8
+#include <ruby.h>
+#include <intern.h>
+#else
 #include "ruby/ruby.h"
 #include "ruby/intern.h"
-#include "modbus.h"
+#endif
 
 #endif

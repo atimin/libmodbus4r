@@ -4,9 +4,10 @@ libmodbus4r –a wrapper for library libmodbus wrote in Ruby. libmodbus – a fr
 
 == Features
 
-* Use only Ruby-1.9.x
-* Use C library *libmodbus*;
+* Use only Ruby-1.9.x and Ruby-1.8.7
+* Include C library *libmodbus*;
 * ModBus TCP and RTU master(client);
+* ModBus TCP and RTU slave(server);
 * Support functions: 
   * read coil status (0x01)
   * read input status (0x02)

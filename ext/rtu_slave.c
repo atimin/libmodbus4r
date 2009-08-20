@@ -24,10 +24,17 @@ void mb_rtu_sl_free(modbus_slave_t *mb_slave)
     modbus_close(mb_slave->mb_param);
 
     modbus_mapping_free(mb_slave->mb_map);
+#ifndef RUBY_1_8
     rb_ary_free(mb_slave->coil_status); 
     rb_ary_free(mb_slave->input_status); 
     rb_ary_free(mb_slave->holding_registers); 
     rb_ary_free(mb_slave->input_registers); 
+#else
+    free(RARRAY_PTR(mb_slave->coil_status)); 
+    free(RARRAY_PTR(mb_slave->input_status)); 
+    free(RARRAY_PTR(mb_slave->holding_registers)); 
+    free(RARRAY_PTR(mb_slave->input_registers)); 
+#endif
 
     free(mb_slave);
 }

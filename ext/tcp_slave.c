@@ -25,10 +25,18 @@ void mb_tcp_sl_free(modbus_slave_t *mb_slave)
     modbus_close(mb_slave->mb_param);
 
     modbus_mapping_free(mb_slave->mb_map);
+    
+#ifndef RUBY_1_8
     rb_ary_free(mb_slave->coil_status); 
     rb_ary_free(mb_slave->input_status); 
     rb_ary_free(mb_slave->holding_registers); 
     rb_ary_free(mb_slave->input_registers); 
+#else
+    free(RARRAY_PTR(mb_slave->coil_status)); 
+    free(RARRAY_PTR(mb_slave->input_status)); 
+    free(RARRAY_PTR(mb_slave->holding_registers)); 
+    free(RARRAY_PTR(mb_slave->input_registers)); 
+#endif
 
     free(mb_slave);
 }
@@ -55,6 +63,7 @@ void *mb_session_serv(void *arg)
             mb_pull_coil_status(mb_slave);
             mb_pull_holding_registers(mb_slave);
         } else if (ret == CONNECTION_CLOSED) {
+            modbus_close(mb_slave->mb_param);
             pthread_exit(NULL);
         } else {
             continue;

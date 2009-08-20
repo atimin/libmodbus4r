@@ -81,8 +81,6 @@ void Init__modbus4r()
     rb_define_singleton_method(cTCPSlave, "new", mb_tcp_sl_new, 3);
     rb_define_method(cTCPSlave, "start", mb_tcp_sl_start, 0);
     rb_define_method(cTCPSlave, "stop", mb_tcp_sl_stop, 0);
-    rb_define_method(cTCPSlave, "max_conn", mb_tcp_sl_get_maxconn_stop, 0);
-    rb_define_method(cTCPSlave, "max_conn=", mb_tcp_sl_set_maxconn_stop, 1);
 
      /* RTUSlave */
     cRTUSlave = rb_define_class_under(mModBus, "RTUSlave", cSlave);

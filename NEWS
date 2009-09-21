@@ -1,11 +1,18 @@
-libmodbus 0.2.2 (2009-08-16)
+libmodbus4r 0.3.0 (2009-09-21)
+===========================
+- Added support slave for TCP and RTU protocol
+- Migrated on libmodbus 0.2.2
+- Added source of libmodbus in project
+- Compatibility with ruby-1.8.7
+
+libmodbus4r 0.2.2 (2009-08-16)
 ===========================
 - Fixed bug in Master::read_input_registers
 
-libmodbus 0.2.1 (2009-08-10)
+libmodbus4r 0.2.1 (2009-08-10)
 ===========================
 - Fixed bug in Master::read_input_coils
 
-libmodbus 0.2.0 (2009-07-30)
+libmodbus4r 0.2.0 (2009-07-30)
 ===========================
 - First public release

@@ -39,6 +39,17 @@ task :install => :compile do
     mkdir target_dir unless File.exist?(target_dir)
     install(File.join('lib', fn), File.join(sitedir, fn), :mode => 0644, :verbose => true)
   end
+  puts "Successfully installed libmodbus4r"
+end
+
+task :uninstall do
+  cd(sitedir) do
+    if File.exist?('modbus4r.rb')
+      rmdir File.join(sitedir, 'modbus4r')
+      rm 'modbus4r.rb'
+      puts "Successfully uninstalled libmodbus4r"
+    end
+  end
 end
 
 begin 

@@ -1,5 +1,6 @@
 require 'rbconfig'
 require 'fileutils'
+require 'rubygems'
 
 begin
   require 'rubygems'
@@ -24,7 +25,7 @@ include FileUtils
 
 sitedir = CONFIG['sitelibdir']
 
-task :install => :make do
+task :install => :compile do
   dest = File.join(sitedir, 'modbus4r')
 
   mkdir_p dest, :mode => 0755
@@ -40,19 +41,31 @@ task :install => :make do
   end
 end
 
-task :make do
-  cd 'ext' do
-    ruby 'extconf.rb'
-    sh 'make'
-    mv '_modbus4r.so', '../lib/'
-  end
-end
+begin 
+  require 'rake/extensiontask'
 
-task :build_gem do
-  cd 'ext' do
-    sh 'make clean'
-    rm 'Makefile'
+  spec = Gem::Specification.new do |s|
+    s.name = "libmodbus4r"
+    s.version = "0.3.0"
+    s.author  = 'Aleksey Timin'
+    s.email = 'atimin@gmail.com'
+    s.platform = Gem::Platform::RUBY
+    s.summary = "Binding use *libmodbus* (free implementation of modbus for Linux\\MacOS) for Ruby."
+    s.files = Dir['lib/**/*','examples/*.rb','spec/*.rb', 'ext/**/*']
+    s.autorequire = "libmodbus4r"
+    s.has_rdoc = true
+    s.rdoc_options = ["--title", "libmodbus4r", "--inline-source", "--main", "README"]
+    s.extra_rdoc_files = ["README", "LICENSE", "NEWS",]
+    s.extensions = ['ext/modbus4r/extconf.rb'] 
+    s.require_path = 'lib/modbus4r'
   end
-  rm 'lib/_modbus4r.so'
-  sh 'gem build libmodbus4r.gemspec'
+
+  Rake::GemPackageTask.new(spec) do |pkg|
+  end
+
+  Rake::ExtensionTask.new('modbus4r', spec) do |ext|
+    ext.lib_dir = 'lib/modbus4r'
+  end
+rescue
+  puts 'rake-compiler not available. Install it with: sudo gem install rake-compiler'
 end

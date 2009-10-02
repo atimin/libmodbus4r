@@ -80,3 +80,7 @@ begin
 rescue
   puts 'rake-compiler not available. Install it with: sudo gem install rake-compiler'
 end
+
+task :spec => :compile
+
+task :default => :spec

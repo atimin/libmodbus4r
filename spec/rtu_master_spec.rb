@@ -7,9 +7,9 @@ describe ModBus::RTUMaster do
     @mstr.connect
   end
 
-  it "should be connect" do
-    @mstr.closed?.should == false
-  end
+#  it "should be connect" do
+#    @mstr.closed?.should == false
+#  end
 
   after(:all) do
     @mstr.close unless @mstr.closed?
